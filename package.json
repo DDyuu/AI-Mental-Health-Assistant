@@ -1,0 +1,16 @@
+{
+  "name": "ai-mental-health-assistant",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "npm run dev --prefix vue",
+    "build": "npm run build --prefix vue",
+    "preview": "npm run preview --prefix vue",
+    "install": "npm install --prefix vue",
+    "backend": "mvn spring-boot:run -f springboot/pom.xml"
+  },
+  "dependencies": {
+    "@microsoft/fetch-event-source": "^2.0.1",
+    "sass": "^1.97.2"
+  }
+}

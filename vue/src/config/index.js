@@ -1,0 +1,1 @@
+export const fileBaseUrl = 'http://localhost:8080'
