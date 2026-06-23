@@ -34,7 +34,6 @@ service.interceptors.response.use(
                 if(!config.url.includes('/auth/login')){
                     ElMessage.error(data.msg || '登录过期，请重新登录')
                     localStorage.removeItem('token')
-                    localStorage.removeItem('userInfo')
                     window.location.href = '/auth/login'
                 }
             } else {

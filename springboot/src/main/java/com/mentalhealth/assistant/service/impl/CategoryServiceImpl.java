@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.mentalhealth.assistant.entity.Category;
 import com.mentalhealth.assistant.mapper.CategoryMapper;
 import com.mentalhealth.assistant.service.CategoryService;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ import java.util.stream.Collectors;
 public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> implements CategoryService {
 
     @Override
+    @Cacheable(value = "category:tree", unless = "#result == null || #result.isEmpty()")
     public List<Category> getCategoryTree() {
         // 查询所有启用的分类
         List<Category> allCategories = baseMapper.selectList(

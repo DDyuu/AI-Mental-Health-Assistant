@@ -13,9 +13,9 @@ const app = createApp(App)
 const pinia = createPinia()
 app.use(pinia)
 
-// 从 localStorage 恢复用户登录状态
+// 从后端获取用户信息（仅刷新页面token时请求）
 const userStore = useUserStore()
-userStore.init()
+userStore.fetchUserInfo()
 
 app.use(ElementPlus)
 app.use(router)

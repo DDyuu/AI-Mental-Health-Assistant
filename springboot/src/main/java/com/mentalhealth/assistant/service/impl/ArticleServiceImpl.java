@@ -11,6 +11,8 @@ import com.mentalhealth.assistant.mapper.CategoryMapper;
 import com.mentalhealth.assistant.service.ArticleService;
 import com.mentalhealth.assistant.vo.ArticlePageVO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -113,6 +115,13 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     }
 
     @Override
+    @Cacheable(value = "article:detail", key = "#id")
+    public Article getArticleDetail(String id) {
+        return baseMapper.selectById(id);
+    }
+
+    @Override
+    @CacheEvict(value = "article:detail", key = "#article.id", condition = "#article.id != null")
     public void saveArticle(Article article) {
         if (article.getId() != null && !article.getId().isEmpty()) {
             // 编辑：更新已有文章

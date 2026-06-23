@@ -7,9 +7,11 @@ import com.mentalhealth.assistant.entity.Category;
 import com.mentalhealth.assistant.mapper.CategoryMapper;
 import com.mentalhealth.assistant.service.ArticleService;
 import com.mentalhealth.assistant.util.JwtUtil;
+import com.mentalhealth.assistant.mq.MessagePublisher;
 import com.mentalhealth.assistant.vo.ArticlePageVO;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
@@ -26,6 +28,9 @@ public class ArticleController {
 
     @Autowired
     private CategoryMapper categoryMapper;
+
+    @Autowired(required = false)
+    private MessagePublisher messagePublisher;
 
     @GetMapping("/article/page")
     public Result<IPage<ArticlePageVO>> getArticlePage(@RequestParam Map<String, Object> params) {
@@ -47,14 +52,18 @@ public class ArticleController {
 
     @GetMapping("/article/{id}")
     public Result<Map<String, Object>> getArticleDetail(@PathVariable String id) {
-        Article article = articleService.getById(id);
+        Article article = articleService.getArticleDetail(id);
         if (article == null) {
             return Result.error(404, "文章不存在");
         }
 
-        // 阅读量 +1
-        article.setReadCount(article.getReadCount() == null ? 1 : article.getReadCount() + 1);
-        articleService.updateById(article);
+        // 阅读量 +1（通过 RabbitMQ 异步更新，不可用时直接更新）
+        if (messagePublisher != null) {
+            messagePublisher.sendReadCount(id);
+        } else {
+            article.setReadCount(article.getReadCount() == null ? 1 : article.getReadCount() + 1);
+            articleService.updateById(article);
+        }
 
         Map<String, Object> result = new HashMap<>();
         result.put("id", article.getId());
@@ -88,6 +97,7 @@ public class ArticleController {
     }
 
     @PutMapping("/article/{id}/status")
+    @CacheEvict(value = "article:detail", key = "#id")
     public Result<Void> updateStatus(@PathVariable String id, @RequestBody Map<String, Integer> body) {
         Integer status = body.get("status");
         if (status == null) {
@@ -101,6 +111,7 @@ public class ArticleController {
     }
 
     @DeleteMapping("/article/{id}")
+    @CacheEvict(value = "article:detail", key = "#id")
     public Result<Void> deleteArticle(@PathVariable String id) {
         articleService.removeById(id);
         return Result.success();

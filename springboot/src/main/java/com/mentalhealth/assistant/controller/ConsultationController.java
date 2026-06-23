@@ -12,6 +12,7 @@ import com.mentalhealth.assistant.mapper.SessionMapper;
 import com.mentalhealth.assistant.mapper.SessionMessageMapper;
 import com.mentalhealth.assistant.mapper.SessionEmotionMapper;
 import com.mentalhealth.assistant.mapper.UserMapper;
+import com.mentalhealth.assistant.mq.MessagePublisher;
 import com.mentalhealth.assistant.service.SessionService;
 import com.mentalhealth.assistant.service.ai.DeepSeekService;
 import com.mentalhealth.assistant.service.ai.EmotionAnalysisService;
@@ -57,7 +58,10 @@ public class ConsultationController {
     @Autowired
     private DeepSeekService deepSeekService;
 
-    @Autowired
+    @Autowired(required = false)
+    private MessagePublisher messagePublisher;
+
+    @Autowired(required = false)
     private EmotionAnalysisService emotionAnalysisService;
 
     @Value("${deepseek.model}")
@@ -235,10 +239,14 @@ public class ConsultationController {
                                     sessionMapper.updateById(s);
                                 }
 
-                                // 异步分析情绪（不阻塞流结束）
+                                // 异步分析情绪（通过 RabbitMQ 解耦，不可用时直接调用）
                                 try {
                                     String conversationText = "用户说：" + userMessage + "\nAI回复：" + fullResponse;
-                                    emotionAnalysisService.analyzeAndSave(finalSessionId, conversationText);
+                                    if (messagePublisher != null) {
+                                        messagePublisher.sendEmotionAnalysis(finalSessionId, conversationText);
+                                    } else if (emotionAnalysisService != null) {
+                                        emotionAnalysisService.analyzeAndSave(finalSessionId, conversationText);
+                                    }
                                 } catch (Exception ex) {
                                     log.warn("情绪分析异常 sessionId={}", finalSessionId, ex);
                                 }

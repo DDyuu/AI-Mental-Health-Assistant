@@ -13,6 +13,38 @@ spring:
     multipart:
       max-file-size: 10MB
       max-request-size: 10MB
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      timeout: 3000ms
+      lettuce:
+        pool:
+          max-active: 8
+          max-idle: 8
+          min-idle: 0
+  cache:
+    type: redis
+    redis:
+      time-to-live: 3600000
+      use-key-prefix: true
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+    listener:
+      simple:
+        concurrency: 3
+        max-concurrency: 10
+        retry:
+            enabled: true
+            max-attempts: 3
+
+# RabbitMQ 配置（默认禁用，启用需安装 RabbitMQ 并设为 true）
+app:
+  rabbitmq:
+    enabled: false
 
 # 文件上传配置
 file:

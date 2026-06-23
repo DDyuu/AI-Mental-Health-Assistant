@@ -8,6 +8,7 @@ import com.mentalhealth.assistant.mapper.EmotionDiaryMapper;
 import com.mentalhealth.assistant.mapper.SessionMapper;
 import com.mentalhealth.assistant.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,6 +34,7 @@ public class DataAnalysisController {
     private SessionMapper sessionMapper;
 
     @GetMapping("/analytics/overview")
+    @Cacheable(value = "data:overview", sync = true)
     public Result<Map<String, Object>> getAnalyticsOverview() {
         Map<String, Object> result = new HashMap<>();
 

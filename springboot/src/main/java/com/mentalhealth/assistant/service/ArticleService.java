@@ -21,4 +21,9 @@ public interface ArticleService extends IService<Article> {
      * 若 article.id 存在则更新，否则新增
      */
     void saveArticle(Article article);
+
+    /**
+     * 获取文章详情（含缓存）
+     */
+    Article getArticleDetail(String id);
 }

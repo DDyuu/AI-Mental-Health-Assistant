@@ -48,33 +48,34 @@ const router = createRouter({
 
 import { useUserStore } from '@/stores/user'
 
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   const token = localStorage.getItem('token')
-  if(token){
+  if (token) {
     const userStore = useUserStore()
+    // 如果用户信息还没加载（页面刷新后），先等加载完成
+    if (!userStore.loaded) {
+      await userStore.fetchUserInfo()
+    }
     if (userStore.isAdmin) {
-      if(to.path.startsWith('/back')){
+      if (to.path.startsWith('/back')) {
         next()
-      } else{
+      } else {
         next('/back/dashboard')
       }
     } else {
-      //用户端账号只能访问前台路由
-      if(to.path.startsWith('/back' || '/auth')){
+      // 普通用户只能访问前台路由
+      if (to.path.startsWith('/back') || to.path.startsWith('/auth')) {
         next('/auth/login')
-      } else{
+      } else {
         next()
       }
     }
-  }else if(to.path.startsWith('/back')){
-    //若访问后台页面，且未登录，跳转到登录页
+  } else if (to.path.startsWith('/back')) {
+    // 未登录访问后台 → 跳转登录页
     next('/auth/login')
   } else {
     next()
   }
-
 })
 
 export default router
-
-

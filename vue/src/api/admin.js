@@ -66,6 +66,10 @@ export function logout() {
     return service.post('/user/logout')
 }
 
+export function getUserInfo() {
+    return service.get('/user/info')
+}
+
 export function getAnalyticsOverview() {
     return service.get('/data-analysis/analytics/overview')
 }
