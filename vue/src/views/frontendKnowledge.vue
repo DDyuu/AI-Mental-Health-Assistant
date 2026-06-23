@@ -105,9 +105,9 @@ const getPageList = () => {
     sortDirection: "desc",
     currentPage: pagination.currentPage,
     size: pagination.size,
+    status: 1,  // 只显示已发布的文章
   };
   getKnowledgeList(params).then((res) => {
-    console.log(res, "列表数据");
     articleList.value = res.records;
     pagination.total = res.total;
   });
@@ -132,6 +132,7 @@ onMounted(() => {
     sortDirection: "desc",
     currentPage: 1,
     size: 4,
+    status: 1,  // 只显示已发布的文章
   };
   getKnowledgeList(params).then((res) => {
     recommendList.value = res.records;

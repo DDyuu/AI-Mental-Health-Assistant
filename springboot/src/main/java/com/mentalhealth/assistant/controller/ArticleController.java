@@ -53,8 +53,8 @@ public class ArticleController {
     @GetMapping("/article/{id}")
     public Result<Map<String, Object>> getArticleDetail(@PathVariable String id) {
         Article article = articleService.getArticleDetail(id);
-        if (article == null) {
-            return Result.error(404, "文章不存在");
+        if (article == null || article.getStatus() == null || article.getStatus() != 1) {
+            return Result.error(404, "文章不存在或已下架");
         }
 
         // 阅读量 +1（通过 RabbitMQ 异步更新，不可用时直接更新）

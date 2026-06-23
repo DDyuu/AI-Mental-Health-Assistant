@@ -37,10 +37,10 @@ service.interceptors.response.use(
                     window.location.href = '/auth/login'
                 }
             } else {
-                ElMessage.error(data.msg || '请求失败')
+                ElMessage.error(data.message || data.msg || '请求失败')
                 return Promise.reject("网络请求失败....")
             }
-        }
+        } 
     },
     (error) => {
         //
