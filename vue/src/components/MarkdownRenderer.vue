@@ -72,7 +72,7 @@ const renderedContent = computed(() => {
 
 <style scoped>
 .markdown-content {
-  line-height: 1.8;
+  line-height: 1.75;
   color: inherit;
   font-size: 15px;
   text-align: left;
@@ -88,18 +88,18 @@ const renderedContent = computed(() => {
 
 .markdown-content h1 {
   font-size: 1.5em;
-  border-bottom: 2px solid #e5e7eb;
+  border-bottom: 2px solid var(--color-border);
   padding-bottom: 0.3em;
 }
 
 .markdown-content h2 {
   font-size: 1.3em;
-  color: #374151;
+  color: var(--color-text);
 }
 
 .markdown-content h3 {
   font-size: 1.1em;
-  color: #4b5563;
+  color: var(--color-text-secondary);
 }
 
 .markdown-content p {
@@ -117,44 +117,47 @@ const renderedContent = computed(() => {
 }
 
 .markdown-content blockquote {
-  border-left: 4px solid #d1d5db;
+  border-left: 3px solid var(--color-border);
   padding-left: 1em;
   margin: 1em 0;
-  color: #6b7280;
+  color: var(--color-text-secondary);
   font-style: italic;
-  background: #f9fafb;
-  border-radius: 0 0.5em 0.5em 0;
+  background: var(--color-border-light);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
   padding: 0.5em 1em;
 }
 
 .ai-markdown blockquote {
-  border-left-color: #3b82f6;
-  background: #eff6ff;
+  border-left-color: var(--color-primary);
+  background: var(--color-primary-light);
 }
 
 .markdown-content hr {
   border: none;
-  border-top: 2px solid #e5e7eb;
+  border-top: 2px solid var(--color-border);
   margin: 1.5em 0;
 }
 
+/* 行内代码文字用 --color-danger：该令牌按 spec §3.3 的标准（可直接当文字用，白底 ≥4.5:1）取值，
+   故底色必须是纯白面 --color-surface（实测 4.54:1）。若沿用简报映射的 --color-border-light 底，
+   同一对只有 4.10:1，低于 12.75px 文字所需的 4.5:1。 */
 .markdown-content code.inline-code {
-  background: #f3f4f6;
+  background: var(--color-surface);
   padding: 0.2em 0.4em;
   border-radius: 0.25em;
   font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
   font-size: 0.85em;
-  color: #e11d48;
+  color: var(--color-danger);
 }
 
 .ai-markdown code.inline-code {
-  background: #dbeafe;
-  color: #1e40af;
+  background: var(--color-primary-light);
+  color: var(--color-primary-dark);
 }
 
 .markdown-content pre.code-block {
-  background: #1f2937;
-  color: #f9fafb;
+  background: var(--color-code-bg);
+  color: var(--color-code-text);
   padding: 1em;
   border-radius: 0.5em;
   overflow-x: auto;
@@ -171,36 +174,36 @@ const renderedContent = computed(() => {
 }
 
 .markdown-content a {
-  color: #3b82f6;
+  color: var(--color-primary);
   text-decoration: none;
   border-bottom: 1px solid transparent;
   transition: border-color 0.2s ease;
 }
 
 .markdown-content a:hover {
-  border-bottom-color: #3b82f6;
+  border-bottom-color: var(--color-primary);
 }
 
 .ai-markdown a {
-  color: #1e40af;
+  color: var(--color-primary-dark);
 }
 
 .ai-markdown a:hover {
-  border-bottom-color: #1e40af;
+  border-bottom-color: var(--color-primary-dark);
 }
 
 .markdown-content strong {
   font-weight: 600;
-  color: #374151;
+  color: var(--color-text);
 }
 
 .ai-markdown strong {
-  color: #1e40af;
+  color: var(--color-primary-dark);
 }
 
 .markdown-content em {
   font-style: italic;
-  color: #6b7280;
+  color: var(--color-text-secondary);
 }
 </style>
 
