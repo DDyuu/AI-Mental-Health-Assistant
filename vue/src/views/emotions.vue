@@ -135,6 +135,7 @@ import { onMounted, ref, reactive } from 'vue'
 import PageHead from '@/components/PageHead.vue'
 import TableSearch from '@/components/TableSearch.vue'
 import { getEmotionPage,deleteEmotion } from '@/api/admin'
+import { chartColors } from '@/styles/chart-palette'
 import {ElMessageBox,ElMessage} from 'element-plus'
 // 标签颜色
 const getEmotionTagType = (emotion) => {
@@ -166,10 +167,10 @@ const getAiEmotionTagType = (emotion) => {
 }
 
 const getEmotionScoreColor = (score) => {
-  if (score >= 80) return '#f56c6c'
-  if (score >= 60) return '#e6a23c'
-  if (score >= 40) return '#909399'
-  return '#67c23a'
+  if (score >= 80) return chartColors.danger
+  if (score >= 60) return chartColors.warning
+  if (score >= 40) return chartColors.textPlaceholder
+  return chartColors.success
 }
 
 const getRiskLevelTagType = (riskLevel) => {
@@ -275,12 +276,12 @@ onMounted(() => {
     
     h4 {
       margin: 0 0 16px 0;
-      color: #303133;
+      color: var(--color-text);
       font-size: 16px;
       
       i {
         margin-right: 8px;
-        color: #409eff;
+        color: var(--color-primary);
       }
     }
   }
@@ -298,7 +299,10 @@ onMounted(() => {
   
   .ai-analysis-preview {
     font-size: 11px;
-    color: #909399;
+    /* brief 原映射为 --color-text-placeholder，但此处是 11px 说明文字（非表单占位符），
+       该令牌白底 2.47:1 < 4.5:1；按已记录的裁定（progress.md 第 185 行，
+       与 Task 7 元信息灰字同类处置）改用 --color-text-secondary = 5.29:1。 */
+    color: var(--color-text-secondary);
     margin-top: 2px;
   }
 }
@@ -310,18 +314,18 @@ onMounted(() => {
   .ai-improvements-section {
     margin-top: 16px;
     padding: 12px;
-    background-color: #f8f9fa;
+    background-color: var(--color-border-light);
     border-radius: 4px;
     
     h5 {
       margin: 0 0 8px 0;
-      color: #606266;
+      color: var(--color-text-secondary);
       font-size: 14px;
       font-weight: 600;
       
       i {
         margin-right: 6px;
-        color: #909399;
+        color: var(--color-text-secondary);
       }
     }
   }
@@ -331,21 +335,24 @@ onMounted(() => {
     flex-wrap: wrap;
     gap: 6px;
     
+    /* 文字用 --color-text 而非 brief 的 --color-success：后者落在 --color-success-light 上实测
+       4.41:1（12px 文字需 4.5:1）；与 consultation.vue `.error-message` 的既有裁定同构
+       （深阶语义色作描边 4.41:1 ≥ 3:1，文字改深色）。语义由描边承载。 */
     .keyword-tag {
-      background-color: #e1f3d8;
-      color: #67c23a;
-      border-color: #b3d8a4;
+      background-color: var(--color-success-light);
+      color: var(--color-text);
+      border-color: var(--color-success);
     }
   }
   
   .suggestion-content,
   .risk-content {
     line-height: 1.6;
-    color: #606266;
-    background-color: white;
+    color: var(--color-text-secondary);
+    background-color: var(--color-surface);
     padding: 8px;
     border-radius: 4px;
-    border: 1px solid #ebeef5;
+    border: 1px solid var(--color-border);
   }
   
   .improvement-list {
@@ -354,7 +361,7 @@ onMounted(() => {
     
     li {
       margin-bottom: 4px;
-      color: #606266;
+      color: var(--color-text-secondary);
       line-height: 1.5;
     }
   }
@@ -362,12 +369,12 @@ onMounted(() => {
   .ai-analysis-meta {
     margin-top: 16px;
     padding-top: 12px;
-    border-top: 1px solid #ebeef5;
+    border-top: 1px solid var(--color-border);
     
     .analysis-time {
       margin: 0;
       font-size: 12px;
-      color: #909399;
+      color: var(--color-text-secondary);
       
       i {
         margin-right: 4px;
@@ -375,9 +382,18 @@ onMounted(() => {
     }
   }
   
+  /* 该声明原有的 important 强制覆盖已按 brief 移除，且未用新的 important 替代
+     （本文件此后不含 important 声明）。
+     本选择器特异性 (0,3,0)（scoped 加属性选择器后 (0,4,0)）已高于 Element 自身的
+     `.el-progress__text` (0,1,0)，不存在"输给低特异性规则"的情况。
+     实测该 12px 从未生效，移除强制覆盖不改变渲染结果：
+     1) el-progress 把字号写成行内 style（12 + strokeWidth*0.4 = 15.2px），行内样式优先于任何
+        选择器，只有 important 声明能盖过它；
+     2) `.el-progress__text` 由子组件渲染，不带本组件的 scope 属性，
+        `.el-progress .el-progress__text[data-v-*]` 实际不命中。 */
   .el-progress {
     .el-progress__text {
-      font-size: 12px !important;
+      font-size: 12px;
     }
   }
 }
