@@ -116,16 +116,22 @@ const trustPoints = [
         margin-top: var(--space-6);
       }
 
+      /* 白字 14px 需要 4.5:1：透明底上渐变最亮侧只有 4.43:1，故用深色 scrim 底把白字抬到 ≈5.6:1，
+         悬停再深一档。聚焦环在彩色渐变上不能用主色（与背景同色系不可辨），改用纯白。 */
       .ghost-btn {
-        background: transparent;
+        background: var(--scrim-30);
         border-color: var(--alpha-60);
         color: var(--color-text-inverse);
 
         &:hover,
         &:focus {
-          background: var(--alpha-10);
+          background: var(--scrim-40);
           border-color: var(--color-text-inverse);
           color: var(--color-text-inverse);
+        }
+
+        &:focus-visible {
+          outline-color: var(--color-text-inverse);
         }
       }
     }
@@ -161,6 +167,9 @@ const trustPoints = [
       flex: 1 1 220px;
       max-width: 320px;
       padding: var(--space-5);
+      /* 卡片是近白底，必须重置继承自 .home-container 的白色文字色，
+         否则日后往卡里加第四个文字节点会白底白字不可见。 */
+      color: var(--color-text);
       /* 95% 白卡而非 10% 白玻璃：玻璃底上的浅色文字无法达到 4.5:1（14px 正文）。
          近白卡底让深色文字拿到 ≈11:1，且视觉上仍是"浮在渐变上的玻璃卡"。 */
       border: 1px solid var(--color-border);

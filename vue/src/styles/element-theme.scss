@@ -136,3 +136,23 @@
   --el-input-border-color: var(--color-border-strong);
   --el-input-hover-border-color: var(--color-primary);
 }
+
+/* ---------------------------------------------------------------------------
+   按钮的悬停 / 按下 / 聚焦色。Element 默认让主按钮悬停变浅
+   （--el-button-hover-bg-color: --el-color-primary-light-3），对本设计的深主色
+   会算出一个浅青绿，白字只剩 2.88:1；聚焦环用 light-5，对白仅 2.04:1。
+   两项都是功能/状态性信息，必须达标，故改为：悬停/按下走向深阶（白字 7.2:1），
+   聚焦环用主色（对白 5.16:1）。
+
+   **选择器必须分开写**：--el-button-hover-bg-color / --el-button-active-bg-color 只能作用于
+   .el-button--primary。若设在 .el-button 上，默认（白色）按钮的悬停底也会变成深青，
+   而它的悬停文字色是主色，结果是深底深字不可读。聚焦环则对全部按钮统一用主色。
+   --------------------------------------------------------------------------- */
+.el-button {
+  --el-button-outline-color: var(--color-primary);
+}
+
+.el-button--primary {
+  --el-button-hover-bg-color: var(--el-color-primary-dark-2);
+  --el-button-active-bg-color: var(--color-primary-dark);
+}
