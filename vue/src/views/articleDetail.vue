@@ -96,7 +96,7 @@ onMounted(() => {
 </script>
 <style lang="scss" scoped>
 .articleDetail-container {
-  background: linear-gradient(135deg, #fafbfc 0%, #f7f9fc 50%, #f2f6fa 100%);
+  background: var(--color-bg);
   .flex-box {
     display: flex;
     align-items: center;
@@ -108,13 +108,20 @@ onMounted(() => {
     }
   }
   .header-section {
-    background: linear-gradient(135deg, #f59e0b 0%, #8b5cf6 100%);
-    color: white;
+    background: linear-gradient(135deg, var(--color-primary-soft) 0%, var(--color-primary-dark) 100%);
+    color: var(--color-text-inverse);
     padding-left: 300px;
     .header-content {
       display: flex;
       align-items: center;
       gap: 12px;
+      /* 同 frontendKnowledge.vue：标题落在主色渐变上，纯白对最亮端只有 3.12:1，
+         故按大字号档（--font-xl = 24px，门槛 3:1）处理；实测标题框内最差 3.67:1（1920 宽）/ 3.87:1（1440 宽）。
+         base.scss 的 h4 规则会盖掉父级继承色，必须显式声明。 */
+      h4 {
+        font-size: var(--font-xl);
+        color: var(--color-text-inverse);
+      }
     }
   }
   .content {
@@ -123,15 +130,15 @@ onMounted(() => {
     padding: 20px;
     .diary-card {
       margin-bottom: 20px;
-      background: white;
+      background: var(--color-surface);
       border-radius: 10px;
       padding: 20px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+      box-shadow: 0 4px 6px var(--scrim-04);
       .title {
         margin-bottom: 15px;
         font-size: 20px;
         font-weight: 600;
-        color: #374151;
+        color: var(--color-text);
       }
       .sub-title {
         margin-top: 20px;
@@ -144,13 +151,13 @@ onMounted(() => {
       .article-title {
         font-size: 28px;
         font-weight: bold;
-        color: #111827;
+        color: var(--color-text);
         margin-top: 30px;
         margin-bottom: 20px;
       }
       .summary-content {
-        background: rgba(126, 211, 33, 0.1);
-        border-left: 4px solid #7ed321;
+        background: var(--color-primary-wash);
+        border-left: 4px solid var(--color-accent);
         padding: 10px 15px;
         border-radius: 0 8px 8px 0;
         position: relative;
@@ -158,7 +165,7 @@ onMounted(() => {
       }
       .content-wrapper {
         font-size: 15px;
-        color: #374151;
+        color: var(--color-text);
         text-align: left;
         :deep(p) {
           margin-bottom: 10px;
@@ -170,12 +177,12 @@ onMounted(() => {
         :deep(h5),
         :deep(h6) {
           margin: 15px 0 10px;
-          color: #111827;
+          color: var(--color-text);
           font-weight: 600;
         }
         :deep(h2) {
           font-size: 15px;
-          border-bottom: 2px solid #e5e7eb;
+          border-bottom: 2px solid var(--color-border);
           padding-bottom: 5px;
         }
         :deep(h3) {
@@ -193,12 +200,12 @@ onMounted(() => {
       .tags-content {
         margin-top: 20px;
         padding-top: 15px;
-        border-top: 1px solid #e5e7eb;
+        border-top: 1px solid var(--color-border);
         .tags-title {
           margin-bottom: 10px;
           font-size: 14px;
           font-weight: 600;
-          color: #374151;
+          color: var(--color-text);
         }
         .tags-list {
           display: flex;

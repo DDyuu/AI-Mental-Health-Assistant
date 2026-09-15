@@ -142,7 +142,7 @@ onMounted(() => {
 </script>
 <style lang="scss" scoped>
 .knowledge-container {
-  background: linear-gradient(135deg, #fafbfc 0%, #f7f9fc 50%, #f2f6fa 100%);
+  background: var(--color-bg);
   .flex-box {
     display: flex;
     align-items: center;
@@ -154,13 +154,21 @@ onMounted(() => {
     }
   }
   .header-section {
-    background: linear-gradient(135deg, #f59e0b 0%, #8b5cf6 100%);
-    color: white;
+    background: linear-gradient(135deg, var(--color-primary-soft) 0%, var(--color-primary-dark) 100%);
+    color: var(--color-text-inverse);
     padding-left: 300px;
     .header-content {
       display: flex;
       align-items: center;
       gap: 12px;
+      /* 标题直接落在主色渐变上。--color-primary-soft 这一端与该色系内任何文字都到不了 4.5:1
+         （spec §3.1 已记录该数学限制：纯白 3.12:1、最深文字 3.81:1），因此标题按大字号档处理：
+         --font-xl 为 24px，门槛降为 3:1；实测标题框内最差 3.67:1（1920 宽）/ 3.87:1（1440 宽）。
+         另：base.scss 给 h1-h4 设了 color: var(--color-text)，会盖掉父级继承，故此处必须显式声明。 */
+      h4 {
+        font-size: var(--font-xl);
+        color: var(--color-text-inverse);
+      }
     }
   }
   .content {
@@ -171,14 +179,14 @@ onMounted(() => {
     padding: 20px;
     .recommend-section {
       width: 280px;
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+      background: var(--color-surface);
+      border-radius: var(--radius-lg);
+      box-shadow: 0 2px 10px var(--scrim-08);
       padding: 15px;
       .section-title {
         font-size: 12;
         font-weight: 600;
-        color: #374151;
+        color: var(--color-text);
         margin-bottom: 10px;
         display: flex;
         align-items: center;
@@ -189,14 +197,14 @@ onMounted(() => {
         flex-direction: column;
         gap: 1rem;
         .recommend-item {
-          border-left: 4px solid #f59e0b;
+          border-left: 4px solid var(--color-accent);
           padding-left: 10px;
           cursor: pointer;
           text-align: left;
           .read-count {
             margin-top: 15px;
             font-size: 12px;
-            color: #6b7280;
+            color: var(--color-text-secondary);
             display: flex;
             align-items: center;
             gap: 10px;
@@ -207,18 +215,18 @@ onMounted(() => {
     .article-list {
       flex: 1;
       .article-item {
-        background: white;
-        border-radius: 12px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        box-shadow: 0 2px 10px var(--scrim-08);
         padding: 15px;
         margin-bottom: 20px;
         display: flex;
         align-items: center;
         cursor: pointer;
-        transition: transform 0.2s, box-shadow 0.2s;
+        transition: var(--transition-base);
         &:hover {
           transform: translateY(-2px);
-          box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+          box-shadow: var(--shadow-md);
         }
         .info {
           margin-left: 20px;
