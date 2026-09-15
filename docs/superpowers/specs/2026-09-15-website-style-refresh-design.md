@@ -1,7 +1,7 @@
 # 网站整体样式焕新 — 设计文档
 
 - 日期：2026-09-15
-- 状态：待用户评审
+- 状态：**已评审通过**（2026-09-15）。评审后修订：补全 6 个样式文件的架构与 `@use` 编译单元约束（4.1）、Element 色阶改为 1–9 全阶（4.4）、图表色板镜像与内联样式规则（4.5 第 7/8 条）、硬指标改为实测口径并记录构建的沙箱前提（7.1）
 - 范围：`vue/` 前端全部样式层（3 套布局 + 13 个页面 + 8 个组件）
 - 不在范围：Spring Boot 后端、业务逻辑、接口、路由行为、数据库
 
@@ -11,15 +11,31 @@
 
 当前前端不存在统一的样式体系，视觉问题有明确的量化证据：
 
-| 问题 | 证据 |
+| 问题 | 证据（均为实测值，可复现） |
 |---|---|
-| 硬编码色值散落各处 | 全站 **194 处**十六进制色值，分布在 15 个 `.vue` 文件中 |
+| 硬编码色值散落各处 | `vue/src/**` 中共 **319 处色值字面量**：`.vue` 文件中 216 处十六进制 + 81 处 `rgb()/rgba()` = 297 处；`style.css` 中 22 处。分布在 17 个 `.vue` 文件中 |
 | 多套配色体系并存 | **5 套**互不相干的配色：① 绿色系（首页/登录页）② 蓝色系（前台导航/articleDialog/选中态）③ Flat-UI 明亮色板（后台 dashboard）④ 橙紫渐变（知识库/文章详情/情绪日记）⑤ 暖纸色（consultation 气泡与鼓励卡） |
 | Vite 脚手架残留污染全站 | `vue/src/style.css` 是脚手架示例（`.hero`/`.counter`/`#next-steps`/`.ticks` 全站无引用），但其中 3 处在真实生效，见 4.3 |
 | Element Plus 主题未定制 | 未覆盖任何 `--el-*` 变量，导致后台呈"原生 Element"观感；`emotions.vue` 甚至把 Element 默认色（`#409eff`/`#67c23a`/`#f56c6c`）手抄进 scoped 样式 |
 | 视觉层级倒挂 | `Navbar.vue` 页面标题 `26px`，大于页面内容标题 |
 | 交互状态缺失 | 前台导航无 `router-link-active` 选中态，用户无法判断当前所在页面 |
 | 魔法数字与硬编码 | 首页 `min-height: calc(100vh - 215px)` 把导航+页脚高度写死；`Navbar` 的 `margin-right: 50px` |
+| 强制样式覆盖 | `!important` **6 处**：`Sidebar.vue:103`、`consultation.vue:1126,1127`、`dashboard.vue:696,697`、`emotions.vue:380` |
+| 颜色写进 template 内联 style | 含色值的内联 `style="..."` **4 处**：`articleDialog.vue:41,43,52`、`home.vue:14` |
+
+各文件色值字面量分布（`Hex` = `#rrggbb` 形式，`RGB` = `rgb()/rgba()` 形式）：
+
+| 文件 | Hex | RGB | 文件 | Hex | RGB |
+|---|---|---|---|---|---|
+| `views/consultation.vue` | 54 | 44 | `components/FrontendLayout.vue` | 7 | 0 |
+| `views/dashboard.vue` | 47 | 14 | `components/articleDialog.vue` | 5 | 0 |
+| `components/MarkdownRenderer.vue` | 22 | 0 | `components/Sidebar.vue` | 4 | 0 |
+| `views/emotions.vue` | 18 | 0 | `components/AuthLayout.vue` | 3 | 8 |
+| `views/consultations.vue` | 16 | 0 | `views/home.vue` | 2 | 8 |
+| `views/articleDetail.vue` | 13 | 2 | `components/Navbar.vue` | 2 | 1 |
+| `views/emotionDiary.vue` | 13 | 1 | `views/register.vue` | 1 | 0 |
+| `style.css`（将删除） | 12 | 10 | `components/BackendLayout.vue` | 1 | 0 |
+| `views/frontendKnowledge.vue` | 8 | 3 | `views/knowledge.vue` | 0 | 0 |
 
 ---
 
@@ -131,15 +147,19 @@
 
 ## 4. 技术架构
 
-### 4.1 文件结构（新增 4 个文件）
+### 4.1 文件结构（新增 6 个文件）
 
 ```
 vue/src/styles/
-├── tokens.scss          # 全站唯一变量源（第 3 节全部内容）
-├── element-theme.scss   # Element Plus --el-* 变量覆盖
+├── tokens.scss          # 唯一令牌源：SCSS 变量（供 element-theme 计算）+ :root CSS 变量
+├── _mixins.scss         # 断点变量 + 响应式 mixin，零 CSS 输出（唯一可被 .vue @use 的文件）
+├── element-theme.scss   # Element Plus --el-* 覆盖，色阶由 tokens 的 SCSS 变量计算得出
 ├── base.scss            # 极简重置 + 4 个通用类
-└── index.scss           # 统一入口，按固定顺序 @use
+├── index.scss           # 统一入口，按固定顺序 @use
+└── chart-palette.js     # ECharts 色板镜像（ECharts 无法消费 CSS 变量，详见 4.5 第 7 条）
 ```
+
+**重要约束：`.vue` 文件永远不要 `@use '../styles/tokens'`。** 每个 SFC 的 `<style>` 是**独立编译单元**，`@use` 会把 `:root { ... }` 重复注入该组件的 scoped CSS 中（并被加上 scope 属性选择器而失效）。组件通过 CSS 自定义属性的**全局继承**读取令牌，无需任何 import；只有断点 mixin 需要 `@use '../styles/_mixins'`，因为该文件零 CSS 输出，重复引入无副作用。
 
 ### 4.2 引入顺序
 
@@ -168,12 +188,12 @@ import './styles/index.scss'   // 替换原来的 './style.css'
 
 覆盖 `--el-*` 变量而非逐组件写 `:deep()`：
 
-- `--el-color-primary` 及 `light-3/5/7/8/9`、`dark-2` 六个色阶：**不手写色值**，用 SCSS `color.mix()` 按 Element 官方配比从主色自动计算，避免手抄偏差，未来换主色仅改一个变量
+- `--el-color-primary` 及 `light-1` … `light-9`、`dark-2`：**不手写色值**，用 SCSS `color.mix()` 按 Element 官方配比从主色自动计算（`light-N = mix(#fff, primary, N*10%)`、`dark-2 = mix(#000, primary, 20%)`），未来换主色仅改一个变量。生成完整 1–9 阶而非仅 3/5/7/8/9，是因为 Element 内部部分组件会引用中间阶，缺阶会回退到默认色而造成偏色
 - `--el-border-radius-base: 10px`（默认 4px，这是"圆润感"的关键改动点）
 - `--el-text-color-primary / regular / secondary / placeholder`
 - `--el-border-color / -light / -lighter`、`--el-fill-color / -light / -lighter / -blank`
 - `--el-box-shadow / -light / -lighter`
-- `--el-color-success / warning / danger / info`
+- `--el-color-success / warning / danger / info` 及其 light 阶
 
 覆盖范围覆盖 `el-button`、`el-input`、`el-select`、`el-table`、`el-menu`、`el-dialog`、`el-card`、`el-tag`、`el-pagination`、`el-form`、`el-dropdown`、`el-avatar` 等全部在用组件。
 
@@ -183,8 +203,10 @@ import './styles/index.scss'   // 替换原来的 './style.css'
 2. 圆角 / 阴影 / 间距 → `var(--radius-*)` / `var(--shadow-*)` / `var(--space-*)`
 3. **结构性样式保留**：flex/grid、尺寸、定位等与视觉方向无关的声明不动，压缩改动面
 4. `<template>` 仅做加容器、加分区、调层级；`<script>` 中业务逻辑、接口、路由行为不改
-5. 例外：**允许替换 `<script>` 中的颜色字面量**（ECharts 配色、`getScoreColor()` 等），但数据结构、图表配置项结构、计算逻辑保持原样（用户已确认）
-6. 响应式断点统一为 `768px` / `1024px` 两档，以 SCSS mixin 表达（CSS 变量无法用于媒体查询）
+5. **允许替换 `<script>` 中的颜色字面量**（ECharts 配色、`getScoreColor()` 等），但数据结构、图表配置项结构、计算逻辑保持原样（用户已确认）
+6. 响应式断点统一为 `768px` / `1024px` 两档，以 `_mixins.scss` 的 mixin 表达（CSS 变量无法用于媒体查询）
+7. **`<script>` 中的图表色值集中到 `styles/chart-palette.js`**：ECharts 的 `color`/`borderColor` 参数需要真实色值，无法传入 `var(--token)`。因此设立单一边界的色板模块作为令牌镜像，`dashboard.vue` 与 `emotions.vue` 从它导入；该文件与 `tokens.scss` 的色值一致性由实施计划中的**校验步骤**机械保证，而非依赖注释约定
+8. **含颜色值的内联 `style="..."` 全部收进 scoped 样式**：共 4 处，分布在 `articleDialog.vue:41,43,52` 与 `home.vue:14`。不含颜色值的内联样式（纯尺寸/间距）不在本次范围
 
 ### 4.6 通用类（刻意保持极少）
 
@@ -262,14 +284,17 @@ import './styles/index.scss'   // 替换原来的 './style.css'
 
 ### 7.1 可自动化硬指标
 
-| 检查项 | 改前 | 改后要求 |
-|---|---|---|
-| `npm run build --prefix vue` | 通过 | **必须通过**（捕获 SCSS 变量未定义等编译错误） |
-| `vue/src/**/*.vue` 中的十六进制色值 | **194 处** | **0 处**（白名单仅 `styles/*.scss`） |
-| `rgb(...)` 形式硬编码 | 多处 | 0 处 |
-| `!important` | 存在 | 0 处 |
+**色值字面量的白名单只有两个文件**：`vue/src/styles/tokens.scss`（CSS 令牌唯一源）与 `vue/src/styles/chart-palette.js`（图表色板镜像）。除这两个文件外，`vue/src/**` 中不得出现任何色值字面量。
 
-第 2 条可反复执行、结果可计数，作为客观验收依据。
+| 检查项 | 改前（实测） | 改后要求 |
+|---|---|---|
+| `npm run build --prefix vue` | **通过**（1.42s，仅两条无关第三方警告） | **必须通过**（捕获 SCSS 变量未定义等编译错误） |
+| `vue/src/**` 中 `.vue` 文件的色值字面量 | **297 处**（216 十六进制 + 81 `rgb()/rgba()`） | **0 处** |
+| `vue/src/style.css` 的色值字面量 | 22 处（12 + 10） | 文件删除，指标消失 |
+| `!important` | **6 处** | **0 处**；若某处经证明无法去除，须书面说明原因并单独报告，不得静默保留 |
+| 含色值的内联 `style="..."` | **4 处** | 0 处 |
+
+**构建的环境前提（实测得出）**：本沙箱（`workspace-write`）下 `vite build` 必然失败于 `spawn EPERM`——Vite 内部的 `optimizeSafeRealPathSync` 调用 `child_process.exec`，受限沙箱禁止以管道捕获子进程输出。这不是代码问题，且改动命令写法无法绕过（失败发生在 Vite 内部）。执行时必须以 `danger-full-access` 运行构建命令。构建基线已用该方式实测通过。
 
 ### 7.2 运行时逐页回归（11 条路由）
 
