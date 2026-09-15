@@ -45,7 +45,7 @@ import iconUrl from '@/assets/images/robot.svg'
       width: 70%;
       height: 70%;
       border-radius: var(--radius-pill);
-      background: radial-gradient(circle, var(--alpha-15) 0%, transparent 70%);
+      background: radial-gradient(circle, var(--alpha-05) 0%, transparent 70%);
       pointer-events: none;
     }
 
@@ -69,8 +69,8 @@ import iconUrl from '@/assets/images/robot.svg'
     .text {
       max-width: 460px;
       margin-bottom: var(--space-6);
-      font-size: var(--font-lg);
-      color: var(--alpha-90);
+      font-size: var(--font-xl);
+      color: var(--color-text-inverse);
     }
 
     .robot {
@@ -97,7 +97,7 @@ import iconUrl from '@/assets/images/robot.svg'
 
   @include m.below-md {
     .left-section {
-      display: none; /* 窄屏只保留表单，避免表单被挤去 */
+      display: none; /* 窄屏只保留表单，避免表单被挤压 */
     }
 
     .right-section {
