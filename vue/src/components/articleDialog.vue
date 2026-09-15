@@ -38,9 +38,9 @@
                     </div>
                 </el-form-item>
                 <el-form-item label="文章内容" prop="content">
-                    <div style="border: 1px solid #dcdfe6; width: 100%;">
+                    <div class="editor-frame">
                         <Toolbar :editor="editorRef" :defaultConfig="toolbarConfig"
-                            style="border-bottom: 1px solid #dcdfe6;" />
+                            class="editor-toolbar" />
                         <Editor v-model="contentHtml" :defaultConfig="editorConfig"
                             style="height: 400px; overflow-y: auto;" @onCreated="handleCreated" maxlength="5000"
                             show-word-limit />
@@ -48,8 +48,7 @@
                 </el-form-item>
             </el-form>
             <!-- 预览文章内容 -->
-            <div v-if="btnPreview" class="w-e-text"
-                style="padding: 10px 20px; border: 1px solid #dcdfe6; border-radius: 4px; min-height: 100px;">
+            <div v-if="btnPreview" class="w-e-text editor-body">
                 <p style="font-size: 16px; font-weight: bold; justify-self: start;">预览内容</p>
                 <div v-html="formData.content"></div>
             </div>
@@ -274,6 +273,26 @@ const handleSubmit = () => {
 </script>
 
 <style lang="scss" scoped>
+.editor-frame {
+    width: 100%;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+
+    .editor-toolbar {
+        border-bottom: 1px solid var(--color-border);
+    }
+}
+
+/* 预览框（template 中 .w-e-text 那层）：原内联 style 携带的边框与圆角一并收进此处 */
+.editor-body {
+    min-height: 100px;
+    padding: var(--space-3) var(--space-5);
+    overflow-y: auto;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+}
+
 .cover-placeholder {
     width: 200px;
     height: 120px;
@@ -281,8 +300,8 @@ const handleSubmit = () => {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    color: #8b949e;
-    background: #f6f8fa;
+    color: var(--color-text-secondary);
+    background: var(--color-border-light);
 }
 
 .cover-image {
