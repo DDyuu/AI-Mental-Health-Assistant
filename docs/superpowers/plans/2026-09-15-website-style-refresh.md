@@ -1918,15 +1918,22 @@ Expected: `views\consultations.vue` = 16
 |---|---|---|---|
 | `#f8f9fa` | 2 | `var(--color-border-light)` | 浅灰区块底 |
 | `#e9ecef` | 3 | `var(--color-border)` | 边框与分隔 |
-| `#e8f4fd` | 1 | `var(--color-primary-light)` | 用户侧气泡底色 |
-| `#f0f9f0` | 1 | `var(--color-accent-light)` | 另一侧气泡底色（原为浅绿，改为暖橙浅底以与用户侧形成清晰区分） |
+| `#e8f4fd` | 1 | `var(--color-primary)` | 用户侧气泡底（见下方裁定：改用 Task 7 的实时会话气泡约定，不再用浅底） |
+| `#f0f9f0` | 1 | `var(--color-surface)` | 另一侧（AI/咨询师）气泡底（同上） |
 | `#495057` | 1 | `var(--color-text-secondary)` | 中等强调文字 |
 | `#333` | 5 | `var(--color-text)` | 主文字 |
 | `#666` | 1 | `var(--color-text-secondary)` | 次级文字 |
 | `#999` | 1 | `var(--color-text-placeholder)` | 弱化文字 |
 | `#fff` | 1 | `var(--color-surface)` | 卡片底 |
 
-用户在左、AI 在右（或反之）的气泡区分色按 Task 7 约定：一侧 `var(--color-primary-light)` + `var(--color-text)`，另一侧 `var(--color-accent-light)` + `var(--color-text)`。**不要用彩色底 + 白字**——这两个气泡底色都很浅，白字会不可读。
+**气泡配色：采用 Task 7 在实时会话页声明的约定，不要用两侧浅底方案。**
+
+Task 7 的 interfaces 明确声明"用户气泡 `var(--color-primary)` 底 + `var(--color-text-inverse)` 字，AI 气泡 `var(--color-surface)` 底 + `var(--color-border)` 描边"，并写明由本任务复用。原稿这里写的"两侧都用浅底（`--color-primary-light` / `--color-accent-light`）+ `--color-text`"与此冲突——这是计划自身的矛盾，以 Task 7 声明的接口为准。理由是这两个页面展示的是**同一批会话**：`/consultation` 是实时对话，`/back/consultations` 是历史记录，管理员对照查看时同一会话的气泡配色应当一致。因此：
+
+- 用户侧：`background: var(--color-primary); color: var(--color-text-inverse);`（白字对主色 5.16:1 达标）
+- 另一侧：`background: var(--color-surface); border: 1px solid var(--color-border); color: var(--color-text);`
+
+**不要**给用户气泡再叠暖色阴影或沿用对方的 `--color-border` 描边（Task 7 评审已就此提过观察）——用户气泡规则里显式重置 `border` 与 `box-shadow`。
 
 - [ ] **Step 3: 审计确认归零（绿）**
 
