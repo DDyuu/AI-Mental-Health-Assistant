@@ -2126,7 +2126,7 @@ const getScoreColor = (score) => {
 |---|---|---|---|
 | `#303133` | 1 | `var(--color-text)` | 主文字 |
 | `#606266` | 3 | `var(--color-text-secondary)` | 次级文字 |
-| `#909399` | 4 | `var(--color-text-secondary)`（标签类）/ `var(--color-text-placeholder)`（弱化说明） | 按语境取用 |
+| `#909399` | 4 | `var(--color-text-secondary)`（标签类）/ `var(--color-text-placeholder)`（弱化说明） | 按语境取用。**但 `getScoreColor()` 的 `>=40` 档例外**：见下方说明 |
 | `#409eff` | 1 | `var(--color-primary)` | 链接/强调 |
 | `#f8f9fa` | 1 | `var(--color-border-light)` | 浅底 |
 | `#ebeef5` | 2 | `var(--color-border)` | 边框 |
@@ -2137,6 +2137,8 @@ const getScoreColor = (score) => {
 | `#f56c6c` | 1 | `var(--color-danger)` | 危险态 |
 
 **重要**：上表这些值是把 Element 默认色**手抄**进 scoped 样式的产物。凡是"该元素本身就由 Element 组件渲染"的场景，应**直接删除这两行**让它继承覆盖后的 `--el-*` 变量，而不是换成 `var(--color-*)`。判断标准：规则作用在 `el-` 开头的组件上就删除，作用在自己写的 `div`/`span` 上就换令牌。
+
+**`getScoreColor()` 的 `>=40` 档不能用 `textPlaceholder`。** 该档的颜色绘制的是 8px 进度条（`--:color`），属**功能性非文字信息**，门槛 3:1；而 `--color-text-placeholder` 对白仅 **2.47:1**、对轨道 `--color-border-light` 仅 **2.23:1**，两项都不达标——这会把原本达标的 `#909399`（3.08:1）改成**不达标**，是净回归。请改用 `chartColors.textSecondary`（对白 **5.29:1**、对轨道 **4.77:1**），既修掉回归又留足余量，同时保持"灰色＝中等"的语义。其余三档（danger 4.54 / warning 5.46 / success 5.06，对轨道 4.09 / 4.92 / 4.56）均达标。
 
 - [ ] **Step 4: 删除该文件的 `!important`（原 380 行）**
 
