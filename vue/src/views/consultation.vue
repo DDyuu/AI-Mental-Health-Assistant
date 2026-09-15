@@ -1142,11 +1142,12 @@ const handleDeleteSession = (sessionId) => {
                 height: 60px;
                 width: 60px;
                 border-radius: 16px;
-                /* 对比度修正：brief 的 accent → accent-text 渐变上白图标实测 3.95:1（图标盒中心）
-                   ~ 3.27:1（最浅端），14px 图标需 4.5:1；改用渐变深端单色 --color-accent-text = 4.84:1。
+                /* 按钮内只有图标、没有文字，属非文字的功能性元素 → 门槛 3:1。
+                   本渐变的浅端 --color-accent 为 3.2733:1、中点 3.9692:1、深端 4.8373:1，全段达标。
+                   注意：只有"控件内含小于 24px 的文字且文字为浅色"时才适用 4.5:1。
                    两条强制覆盖（background / border 的 important 声明）已按 brief 删除：本选择器
                    特异性 (0,4,1) 远高于 element-plus 的 .el-button--primary (0,1,0)，无需强制覆盖。 */
-                background: var(--color-accent-text);
+                background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent-text) 100%);
                 border: none;
                 box-shadow: 0 6px 20px var(--color-accent-wash-strong);
                 transition: all 0.3s ease;
