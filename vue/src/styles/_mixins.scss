@@ -1,0 +1,24 @@
+// 断点与响应式 mixin —— 零 CSS 输出，因此可被任意 .vue 安全 @use（不会重复注入 :root）
+// 用法（组件内，相对路径）：
+//   @use '../styles/mixins' as m;
+//   @include m.below-md { font-size: var(--font-sm); }
+$bp-sm: 768px;
+$bp-md: 1024px;
+
+@mixin below-sm {
+  @media (max-width: #{$bp-sm}) {
+    @content;
+  }
+}
+
+@mixin below-md {
+  @media (max-width: #{$bp-md}) {
+    @content;
+  }
+}
+
+@mixin above-md {
+  @media (min-width: #{$bp-md + 1}) {
+    @content;
+  }
+}

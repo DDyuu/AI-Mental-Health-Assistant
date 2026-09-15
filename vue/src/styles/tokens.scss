@@ -1,0 +1,154 @@
+// ============================================================================
+// 设计令牌唯一源 —— 全站唯一允许出现色值字面量的 SCSS 文件
+//
+// 使用约定（违反会导致样式失效，务必遵守）：
+//   * .vue 组件直接写 var(--token)，**不要** @use 本文件。
+//     SFC 的 <style> 是独立编译单元，@use 会把 :root 重复注入该组件的 scoped CSS，
+//     并被加上 scope 属性选择器而失效。
+//   * element-theme.scss 用 `@use './tokens' as t` 取 $c-* 变量做派生计算。
+//   * ECharts 色值见 chart-palette.js（本文件的镜像，由 npm run check:tokens 校验）。
+// ============================================================================
+
+// ---------------------------------------------------------------------------
+// 1. SCSS 变量：仅供同一次编译内的计算（Element 色阶派生）
+// ---------------------------------------------------------------------------
+$c-white: #FFFFFF;
+$c-black: #000000;
+
+$c-primary: #40776B;
+$c-primary-soft: #5B9E8F;
+$c-primary-dark: #2F5A51;
+$c-primary-light: #E9F3F0;
+
+$c-accent: #C97B4A;
+$c-accent-text: #A85F2E;
+$c-accent-light: #FBF0E8;
+
+$c-bg: #F7F9F8;
+$c-surface: #FFFFFF;
+$c-border: #E6EDEA;
+$c-border-light: #F0F4F2;
+
+$c-text: #2C3A36;
+$c-text-secondary: #5F6F6A;
+$c-text-placeholder: #9AA8A3;
+
+$c-success: #3D7A5F;
+$c-success-light: #E7F2EC;
+$c-warning: #8A6220;
+$c-warning-light: #F7EFE0;
+$c-danger: #B85A52;
+$c-danger-light: #F8E9E7;
+$c-info: #4A6E91;
+$c-info-light: #E9F0F6;
+
+// ---------------------------------------------------------------------------
+// 2. 运行时 CSS 自定义属性：全站唯一样式来源
+// ---------------------------------------------------------------------------
+:root {
+  /* 品牌与主色（双阶：soft 用于大面积，primary 用于小面积交互元素） */
+  --color-primary: #{$c-primary};
+  --color-primary-soft: #{$c-primary-soft};
+  --color-primary-dark: #{$c-primary-dark};
+  --color-primary-light: #{$c-primary-light};
+  --color-primary-wash: rgba(64, 119, 107, 0.08);
+  --color-primary-wash-strong: rgba(64, 119, 107, 0.24);
+
+  /* 强调色（暖橙） */
+  --color-accent: #{$c-accent};
+  --color-accent-text: #{$c-accent-text};
+  --color-accent-light: #{$c-accent-light};
+  --color-accent-wash: rgba(201, 123, 74, 0.10);
+  --color-accent-wash-strong: rgba(201, 123, 74, 0.24);
+
+  /* 背景与表面 */
+  --color-bg: #{$c-bg};
+  --color-surface: #{$c-surface};
+
+  /* 边框 */
+  --color-border: #{$c-border};
+  --color-border-light: #{$c-border-light};
+
+  /* 文字 */
+  --color-text: #{$c-text};
+  --color-text-secondary: #{$c-text-secondary};
+  --color-text-placeholder: #{$c-text-placeholder};
+  --color-text-inverse: #{$c-white};
+
+  /* 语义色（深阶可直接作文字，浅阶仅作底色） */
+  --color-success: #{$c-success};
+  --color-success-light: #{$c-success-light};
+  --color-success-wash-strong: rgba(61, 122, 95, 0.40);
+  --color-warning: #{$c-warning};
+  --color-warning-light: #{$c-warning-light};
+  --color-danger: #{$c-danger};
+  --color-danger-light: #{$c-danger-light};
+  --color-danger-wash: rgba(184, 90, 82, 0.10);
+  --color-info: #{$c-info};
+  --color-info-light: #{$c-info-light};
+  --color-info-wash-strong: rgba(74, 110, 145, 0.30);
+
+  /* 代码块（MarkdownRenderer 用） */
+  --color-code-bg: #22332E;
+  --color-code-text: #E8F1EE;
+
+  /* 白色透明层阶梯（彩色/深色底上的叠加，取代散落的 rgba(255,255,255,x)） */
+  --alpha-02: rgba(255, 255, 255, 0.02);
+  --alpha-05: rgba(255, 255, 255, 0.05);
+  --alpha-10: rgba(255, 255, 255, 0.10);
+  --alpha-15: rgba(255, 255, 255, 0.15);
+  --alpha-20: rgba(255, 255, 255, 0.20);
+  --alpha-25: rgba(255, 255, 255, 0.25);
+  --alpha-30: rgba(255, 255, 255, 0.30);
+  --alpha-50: rgba(255, 255, 255, 0.50);
+  --alpha-60: rgba(255, 255, 255, 0.60);
+  --alpha-70: rgba(255, 255, 255, 0.70);
+  --alpha-80: rgba(255, 255, 255, 0.80);
+  --alpha-90: rgba(255, 255, 255, 0.90);
+  --alpha-95: rgba(255, 255, 255, 0.95);
+  --alpha-98: rgba(255, 255, 255, 0.98);
+
+  /* 深色透明层阶梯（阴影/分隔/弱化），色相取自 --color-text 而非纯黑 */
+  --scrim-04: rgba(44, 58, 54, 0.04);
+  --scrim-06: rgba(44, 58, 54, 0.06);
+  --scrim-08: rgba(44, 58, 54, 0.08);
+  --scrim-10: rgba(44, 58, 54, 0.10);
+  --scrim-12: rgba(44, 58, 54, 0.12);
+  --scrim-30: rgba(44, 58, 54, 0.30);
+  --scrim-40: rgba(44, 58, 54, 0.40);
+
+  /* 圆角 */
+  --radius-sm: 8px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-pill: 999px;
+
+  /* 阴影 */
+  --shadow-sm: 0 2px 8px rgba(44, 58, 54, 0.06);
+  --shadow-md: 0 8px 24px rgba(44, 58, 54, 0.08);
+  --shadow-lg: 0 16px 40px rgba(44, 58, 54, 0.10);
+
+  /* 间距阶梯 */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+
+  /* 字号阶梯 */
+  --font-xs: 12px;
+  --font-sm: 14px;
+  --font-md: 16px;
+  --font-lg: 18px;
+  --font-xl: 24px;
+  --font-2xl: 32px;
+  --font-3xl: 44px;
+
+  /* 字体与动效 */
+  --font-sans: system-ui, -apple-system, 'Segoe UI', 'Microsoft YaHei', 'PingFang SC', sans-serif;
+  --font-mono: ui-monospace, Consolas, 'Courier New', monospace;
+  --transition-base: 0.2s ease;
+}

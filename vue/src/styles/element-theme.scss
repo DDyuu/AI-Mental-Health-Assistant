@@ -1,0 +1,112 @@
+// Element Plus 主题覆盖
+// 必须在 element-plus/dist/index.css 之后加载（由 index.scss 的 @use 顺序 + main.js 的
+// import 顺序共同保证），否则同优先级下会被 Element 默认值覆盖。
+@use 'sass:color';
+@use './tokens' as t;
+
+@function mix-light($c, $n) {
+  @return color.mix(t.$c-white, $c, $n * 10%);
+}
+@function mix-dark($c, $n) {
+  @return color.mix(t.$c-black, $c, $n * 10%);
+}
+
+:root {
+  /* 主色 + 1..9 全部浅阶 + 深阶（Element 部分组件会引用中间阶，缺阶会回退默认色造成偏色） */
+  --el-color-primary: #{t.$c-primary};
+  --el-color-primary-light-1: #{mix-light(t.$c-primary, 1)};
+  --el-color-primary-light-2: #{mix-light(t.$c-primary, 2)};
+  --el-color-primary-light-3: #{mix-light(t.$c-primary, 3)};
+  --el-color-primary-light-4: #{mix-light(t.$c-primary, 4)};
+  --el-color-primary-light-5: #{mix-light(t.$c-primary, 5)};
+  --el-color-primary-light-6: #{mix-light(t.$c-primary, 6)};
+  --el-color-primary-light-7: #{mix-light(t.$c-primary, 7)};
+  --el-color-primary-light-8: #{mix-light(t.$c-primary, 8)};
+  --el-color-primary-light-9: #{mix-light(t.$c-primary, 9)};
+  --el-color-primary-dark-2: #{mix-dark(t.$c-primary, 2)};
+
+  --el-color-success: #{t.$c-success};
+  --el-color-success-light-3: #{mix-light(t.$c-success, 3)};
+  --el-color-success-light-5: #{mix-light(t.$c-success, 5)};
+  --el-color-success-light-7: #{mix-light(t.$c-success, 7)};
+  --el-color-success-light-8: #{mix-light(t.$c-success, 8)};
+  --el-color-success-light-9: #{mix-light(t.$c-success, 9)};
+  --el-color-success-dark-2: #{mix-dark(t.$c-success, 2)};
+
+  --el-color-warning: #{t.$c-warning};
+  --el-color-warning-light-3: #{mix-light(t.$c-warning, 3)};
+  --el-color-warning-light-5: #{mix-light(t.$c-warning, 5)};
+  --el-color-warning-light-7: #{mix-light(t.$c-warning, 7)};
+  --el-color-warning-light-8: #{mix-light(t.$c-warning, 8)};
+  --el-color-warning-light-9: #{mix-light(t.$c-warning, 9)};
+  --el-color-warning-dark-2: #{mix-dark(t.$c-warning, 2)};
+
+  --el-color-danger: #{t.$c-danger};
+  --el-color-danger-light-3: #{mix-light(t.$c-danger, 3)};
+  --el-color-danger-light-5: #{mix-light(t.$c-danger, 5)};
+  --el-color-danger-light-7: #{mix-light(t.$c-danger, 7)};
+  --el-color-danger-light-8: #{mix-light(t.$c-danger, 8)};
+  --el-color-danger-light-9: #{mix-light(t.$c-danger, 9)};
+  --el-color-danger-dark-2: #{mix-dark(t.$c-danger, 2)};
+
+  /* Element 同时存在 danger 与 error 两套变量名，必须都覆盖 */
+  --el-color-error: #{t.$c-danger};
+  --el-color-error-light-3: #{mix-light(t.$c-danger, 3)};
+  --el-color-error-light-5: #{mix-light(t.$c-danger, 5)};
+  --el-color-error-light-7: #{mix-light(t.$c-danger, 7)};
+  --el-color-error-light-8: #{mix-light(t.$c-danger, 8)};
+  --el-color-error-light-9: #{mix-light(t.$c-danger, 9)};
+  --el-color-error-dark-2: #{mix-dark(t.$c-danger, 2)};
+
+  --el-color-info: #{t.$c-info};
+  --el-color-info-light-3: #{mix-light(t.$c-info, 3)};
+  --el-color-info-light-5: #{mix-light(t.$c-info, 5)};
+  --el-color-info-light-7: #{mix-light(t.$c-info, 7)};
+  --el-color-info-light-8: #{mix-light(t.$c-info, 8)};
+  --el-color-info-light-9: #{mix-light(t.$c-info, 9)};
+  --el-color-info-dark-2: #{mix-dark(t.$c-info, 2)};
+
+  /* 文字 */
+  --el-text-color-primary: #{t.$c-text};
+  --el-text-color-regular: #{t.$c-text-secondary};
+  --el-text-color-secondary: #{t.$c-text-secondary};
+  --el-text-color-placeholder: #{t.$c-text-placeholder};
+  --el-text-color-disabled: #{t.$c-text-placeholder};
+
+  /* 边框 */
+  --el-border-color: #{t.$c-border};
+  --el-border-color-light: #{t.$c-border};
+  --el-border-color-lighter: #{t.$c-border-light};
+  --el-border-color-extra-light: #{t.$c-border-light};
+
+  /* 填充 */
+  --el-fill-color: #{t.$c-border-light};
+  --el-fill-color-light: #{t.$c-border-light};
+  --el-fill-color-lighter: #{t.$c-bg};
+  --el-fill-color-extra-light: #{t.$c-bg};
+  --el-fill-color-blank: #{t.$c-surface};
+
+  /* 背景 */
+  --el-bg-color: #{t.$c-surface};
+  --el-bg-color-page: #{t.$c-bg};
+  --el-bg-color-overlay: #{t.$c-surface};
+
+  /* 圆角：默认 4px，这是"圆润感"的关键改动点 */
+  --el-border-radius-base: 10px;
+  --el-border-radius-small: 8px;
+  --el-border-radius-round: 999px;
+  --el-border-radius-circle: 100%;
+
+  /* 阴影：几何沿用 Element 默认，颜色取自 --scrim-* 令牌（本文件不得出现色值字面量） */
+  --el-box-shadow: 0 8px 24px var(--scrim-08);
+  --el-box-shadow-light: 0 2px 8px var(--scrim-06);
+  --el-box-shadow-lighter: 0 2px 8px var(--scrim-04);
+  --el-box-shadow-dark: 0 16px 40px var(--scrim-10);
+
+  /* 字号 */
+  --el-font-size-base: 14px;
+  --el-font-size-small: 13px;
+  --el-font-size-extra-small: 12px;
+  --el-font-size-medium: 16px;
+  --el-font-size-large: 18px;
+}

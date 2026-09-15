@@ -1,0 +1,4 @@
+// 样式层统一入口。@use 顺序即 CSS 输出顺序，不要调整。
+@use './tokens';          // 必须最先：:root 令牌
+@use './element-theme';   // 必须其次：覆盖 Element 变量
+@use './base';            // 最后：重置与通用类
