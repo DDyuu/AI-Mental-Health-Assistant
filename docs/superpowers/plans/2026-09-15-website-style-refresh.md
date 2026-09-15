@@ -1517,9 +1517,22 @@ Expected: `frontendKnowledge.vue` = 11，`articleDetail.vue` = 15
 | `#374151` | 1 | `var(--color-text)` | 标题 |
 | `#6b7280` | 1 | `var(--color-text-secondary)` | 摘要 |
 | `rgba(0,0,0,0.08)` | 2 | `var(--scrim-08)` | 阴影/描边 |
-| `rgba(0,0,0,0.12)` | 1 | `var(--scrim-12)` | hover 阴影 |
+| `rgba(0,0,0,0.12)` | 1 | `var(--shadow-md)` | hover 阴影（用 shadow 令牌而非 `--scrim-12`：本任务的 interfaces 与下面的说明都指定 `--shadow-md`，且 hover 抬升需要完整阴影而非单层 alpha） |
 
 标题渐变改为 `linear-gradient(135deg, var(--color-primary-soft) 0%, var(--color-primary-dark) 100%)`（原 `#f59e0b → #8b5cf6`），`border-left: 4px solid #f59e0b` 改为 `var(--color-accent)`。卡片圆角改 `var(--radius-lg)`，hover 加 `transform: translateY(-2px)` + `var(--shadow-md)` + `transition: var(--transition-base)`。
+
+**必须同时修正标题的继承链（否则照抄本任务会留下一个不达标的页面标题）。** 这两个页面的标题是 `<h4>`，而 `base.scss` 里 `h4 { color: var(--color-text) }` 是**元素自身的声明**，会胜过 `.header-section` 上 `color: white` 的继承——继承永远输给声明，与优先级无关。照抄的后果是标题以 16px 的深灰落在渐变上：实测 **2.82:1**（1024px）/ **2.99:1**（1280px）/ **3.07:1**（1440px），低于 16px 文字要求的 4.5:1。调色板里也没有任何颜色能在 `--color-primary-soft` 上达到 4.5:1（白 3.1193:1、深字 3.8130:1），所以唯一出路是进入大字号档。因此这三个渐变带上的标题必须显式写：
+
+```scss
+      h4 {
+        /* 继承的 color 会被 base.scss 的 h4 声明盖掉，必须显式设置。
+           24px 进入大字号档（门槛 3:1）：全带最低 3.1193:1，标题框内最低 3.25:1。 */
+        color: var(--color-text-inverse);
+        font-size: var(--font-xl);
+      }
+```
+
+与 Task 2 对登录页 `.text` 的裁定是同一模式。
 
 - [ ] **Step 3: 按值映射表替换 `articleDetail.vue` 的色值**
 
@@ -1585,6 +1598,8 @@ Expected: `emotionDiary.vue` = 14
 | `rgba(0,0,0,0.05)` | 1 | `var(--scrim-04)` | 阴影 |
 
 标题渐变由 `#7ed321 → #f5a623` 改为 `linear-gradient(135deg, var(--color-primary-soft) 0%, var(--color-accent) 100%)`；选项选中态由 `border-color: #7ed321; background: #f0fdf4` 改为 `border-color: var(--color-primary); background: var(--color-primary-light)`；卡片圆角统一 `var(--radius-lg)`。
+
+**同样要修正标题的继承链**（理由见 Task 5 的同名段落：`base.scss` 的 `h4 { color: var(--color-text) }` 会盖掉继承来的 `color: white`）。本页标题也要显式写 `color: var(--color-text-inverse); font-size: var(--font-xl);`——本条渐变的浅端是 `--color-primary-soft`，全带最低 3.1193:1，标题框内最低 3.29:1，均 ≥3:1。
 
 - [ ] **Step 3: 审计确认归零（绿）**
 
@@ -1732,7 +1747,7 @@ git commit -m "feat(style): AI 咨询页消除暖纸色与粉橙配色，气泡�
 ### Task 8: Markdown 正文渲染组件
 
 **Files:**
-- Modify: `vue/src/components/MarkdownRenderer.vue`（样式段 85-210 行）
+- Modify: `vue/src/components/MarkdownRenderer.vue`（样式段 73-206 行）
 
 **Interfaces:**
 - Consumes: Task 1 令牌，特别是 `--color-code-bg` / `--color-code-text`
@@ -1753,7 +1768,8 @@ Expected: `MarkdownRenderer.vue` = 22
 | `#6b7280` | 2 | `var(--color-text-secondary)` | 引用块文字、脚注 |
 | `#d1d5db` | 1 | `var(--color-border)` | 引用块左边框 |
 | `#f9fafb` | 2 | `var(--color-border-light)` | 引用块底 |
-| `#f3f4f6` | 1 | `var(--color-border-light)` | 行内代码底 |
+| `#f3f4f6` | 1 | `var(--color-surface)` | 行内代码底。**不能映射到 `--color-border-light`**：该处文字是 `var(--color-danger)`（12.75px），在 `--color-border-light` 上实测只有 **4.0948:1**，低于 4.5:1；换到 `--color-surface` 后为 **4.5431:1** 达标。这是 spec §3.5 的硬约束优先于"看起来更贴近原色"的例子 |
+| `#e11d48` | 1 | `var(--color-danger)` | 行内代码的文字色（不是删除线的颜色——原文件里它作用在 code 上） |
 | `#3b82f6` | 3 | `var(--color-primary)` | 链接、hover 下划线 |
 | `#eff6ff` | 1 | `var(--color-primary-light)` | 提示块底 |
 | `#dbeafe` | 1 | `var(--color-primary-light)` | 标签底 |
@@ -1762,7 +1778,7 @@ Expected: `MarkdownRenderer.vue` = 22
 | `#1f2937` | 1 | `var(--color-code-bg)` | 代码块底 |
 | `#f9fafb`（代码块内文字） | — | `var(--color-code-text)` | 代码块文字 |
 
-另外把正文 `line-height` 提到 `1.75`（阅读舒适度，spec 第 5.2 节要求），引用块左边框由 `4px` 改为 `3px` 并统一用 `var(--radius-sm)` 收角。
+另外把正文 `line-height` 设为 `1.75`（**注意：文件里的原值是 `1.8`，因此这是略微收紧而非提升**——1.75 是本 brief 指定的值，照此执行并在报告中如实说明，不要声称"提升了行高"），引用块左边框由 `4px` 改为 `3px` 并统一用 `var(--radius-sm)` 收角。
 
 - [ ] **Step 3: 审计确认归零（绿）**
 
