@@ -198,15 +198,23 @@ const iconUrl = new URL("@/assets/images/like.png", import.meta.url).href;
 </script>
 <style lang="scss" scoped>
 .emotionDiary-container {
-  background: linear-gradient(135deg, #fafbfc 0%, #f7f9fc 50%, #f2f6fa 100%);
+  background: var(--color-bg);
   .header-section {
-    background: linear-gradient(135deg, #7ed321 0%, #f5a623 100%);
-    color: white;
+    background: linear-gradient(135deg, var(--color-primary-soft) 0%, var(--color-accent) 100%);
+    color: var(--color-text-inverse);
     padding-left:300px;
     .header-content {
       display: flex;
       align-items: center;
       gap: 12px;
+      /* 标题落在主色/accent 渐变上：该渐变最亮端（--color-primary-soft）对纯白只有 3.12:1，
+         低于正文 4.5:1 且为色板数学限制（spec §3.1），故标题按大字号档处理（--font-xl = 24px，门槛 3:1）。
+         实测标题框内最差 3.25:1（1920 宽）/ 3.29:1（1440 宽），整条渐变最低 3.12:1。
+         base.scss 的 h4 规则会盖掉父级继承色，必须显式声明。 */
+      h4 {
+        font-size: var(--font-xl);
+        color: var(--color-text-inverse);
+      }
     }
   }
   .content {
@@ -215,21 +223,21 @@ const iconUrl = new URL("@/assets/images/like.png", import.meta.url).href;
     padding: 20px;
     .diary-card {
       margin-bottom: 20px;
-      background: white;
-      border-radius: 10px;
+      background: var(--color-surface);
+      border-radius: var(--radius-lg);
       padding: 20px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+      box-shadow: 0 4px 6px var(--scrim-04);
       .title {
         margin-bottom: 20px;
         font-size: 25px;
         font-weight: 600;
-        color: #374151;
+        color: var(--color-text);
       }
       .section {
         margin-bottom: 20px;
         p {
           font-size: 15px;
-          color: #6b7280;
+          color: var(--color-text-secondary);
           margin-bottom: 15px;
         }
       }
@@ -239,19 +247,22 @@ const iconUrl = new URL("@/assets/images/like.png", import.meta.url).href;
         gap: 10px;
         .emotion-card {
           padding: 15px;
-          border: 2px solid #e5e7eb;
-          border-radius: 15px;
+          border: 2px solid var(--color-border);
+          border-radius: var(--radius-lg);
           text-align: center;
           cursor: pointer;
-          background: #f9fafb;
+          background: var(--color-border-light);
           .emotion-name {
             margin-top: 10px;
             padding: 0 75px;
-            color: #374151;
+            color: var(--color-text);
           }
+          /* 选中态：主色描边 + 主色浅底（Task 12 沿用同一约定）。
+             描边即状态指示，对卡片白底 5.16:1、对浅底 4.56:1，均 ≥3:1；
+             未选中态的 --color-border 描边属 spec §3.5 例外二（中性结构描边）。 */
           &.selected {
-            border-color: #7ed321;
-            background: #f0fdf4;
+            border-color: var(--color-primary);
+            background: var(--color-primary-light);
             transform: translateY(-3px);
           }
         }
@@ -259,7 +270,7 @@ const iconUrl = new URL("@/assets/images/like.png", import.meta.url).href;
       .detail-form {
         .form-label {
           margin: 10px 0;
-          color: #374151;
+          color: var(--color-text);
         }
         .life-indicators {
           display: flex;
