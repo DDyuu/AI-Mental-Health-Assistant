@@ -25,30 +25,33 @@ import Navbar from './Navbar.vue'
   width: 100%;
 }
 
-  .outer-container {
-    height: 100%;
-    flex: 1;
-    overflow: hidden;
-  }
+.outer-container {
+  height: 100%;
+  flex: 1;
+  overflow: hidden;
+}
 
-  .inner-container {
-    height: 100%;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-  }
+.inner-container {
+  height: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
 
-  .main-content {
-    flex: 1;
-    overflow-y: auto;
-    background: #e4e7ec;
-    padding: 10px;
-  }
+.main-content {
+  flex: 1;
+  overflow-y: auto;
+  background: var(--color-bg);
+  padding: var(--space-4);
+}
 
-  .content-container {
-    padding: 20px;
-    background: white;
-    min-height: calc(100% - 7.4vh);
-  }
+.content-container {
+  padding: var(--space-5);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  min-height: calc(100% - 7.4vh);
+}
 </style>

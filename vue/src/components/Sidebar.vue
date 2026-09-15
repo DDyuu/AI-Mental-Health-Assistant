@@ -33,79 +33,104 @@ const isCollapse = computed(() => adminStore.isCollapse)
 </script>
 
 <style lang="scss" scoped>
+@use '../styles/mixins' as m;
+
 .sidebar-wrapper {
-    width: 200px;
-    transition: width 0.3s ease;
-    overflow: hidden;
-    flex-shrink: 0;
+  width: 200px;
+  flex-shrink: 0;
+  overflow: hidden;
+  transition: width 0.3s ease;
 
-    @media (min-width: 1440px) {
-        width: 220px;
+  @include m.above-md {
+    width: 220px;
+  }
+
+  @media (min-width: 1920px) {
+    width: 240px;
+  }
+
+  &.collapsed {
+    width: 64px;
+  }
+
+  .sidebar-menu {
+    height: 100%;
+    border-right: none;
+
+    .brand {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-2);
+      height: 56px;
+      padding: var(--space-3) var(--space-2);
+      box-sizing: border-box;
+      border-bottom: 1px solid var(--color-border);
+
+      .logo-img {
+        width: 28px;
+        height: 28px;
+        flex-shrink: 0;
+      }
+
+      .info-card {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-start;
+        min-width: 0;
+        overflow: hidden;
+      }
+
+      .info-card h1 {
+        margin: 0;
+        font-size: var(--font-sm);
+        font-weight: 600;
+        line-height: 1.5;
+        white-space: nowrap;
+        color: var(--color-text);
+      }
+
+      .info-card p {
+        margin: var(--space-1) 0 0;
+        font-size: var(--font-xs);
+        line-height: 1.3;
+        white-space: nowrap;
+        color: var(--color-text-secondary);
+      }
+    }
+  }
+
+  /* 菜单项：圆角 + 左右内缩，选中态用主色浅底 + 左侧主色竖条 */
+  :deep(.el-menu-item) {
+    height: 44px;
+    line-height: 44px;
+    margin: 0 var(--space-2);
+    border-radius: var(--radius-md);
+
+    &:hover {
+      color: var(--color-primary);
+      background-color: var(--color-primary-wash);
     }
 
-    @media (min-width: 1920px) {
-        width: 240px;
+    &.is-active {
+      color: var(--color-primary);
+      background-color: var(--color-primary-light);
+      font-weight: 600;
+      position: relative;
+
+      &::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 50%;
+        width: 3px;
+        height: 20px;
+        transform: translateY(-50%);
+        border-radius: var(--radius-pill);
+        background: var(--color-primary);
+      }
     }
-
-    &.collapsed {
-        width: 64px;
-    }
-
-    .sidebar-menu {
-        height: 100%;
-
-        .brand {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            padding: 12px 10px;
-            border-bottom: 1px solid var(--el-menu-border-color, #e6e6e6);
-            height: 56px;
-            box-sizing: border-box;
-
-            .logo-img {
-                width: 28px;
-                height: 28px;
-                flex-shrink: 0;
-            }
-
-            .info-card {
-                display: flex;
-                flex-direction: column;
-                justify-content: start;
-                align-items: start;
-                min-width: 0;
-                overflow: hidden;
-            }
-
-            .info-card h1 {
-                margin: 0;
-                font-size: 14px;
-                font-weight: 600;
-                letter-spacing: 0.026vw;
-                line-height: 1.5;
-                color: var(--el-text-color-primary, #333);
-                white-space: nowrap;
-            }
-
-            .info-card p {
-                margin: 2px 0 0;
-                font-size: 12px;
-                line-height: 1.3;
-                color: var(--el-text-color-secondary, #909399);
-                white-space: nowrap;
-            }
-        }
-    }
-
-    :deep(.is-active) {
-        background-color: #e6ecf7 !important;
-    }
-
-    :deep(.el-menu-item) {
-        height: 44px;
-        line-height: 44px;
-    }
+  }
 }
 </style>
