@@ -489,39 +489,39 @@ const handleDeleteSession = (sessionId) => {
         .ai-assistant-info {
             margin-bottom: 20px;
             background: linear-gradient(135deg,
-                    rgba(255, 255, 255, 0.9) 0%,
-                    rgba(255, 252, 248, 0.95) 100%);
+                    var(--alpha-90) 0%,
+                    var(--alpha-95) 100%);
             border-radius: 16px;
             padding: 16px;
             box-shadow:
-                0 8px 32px rgba(251, 146, 60, 0.06),
-                0 2px 8px rgba(0, 0, 0, 0.04);
-            border: 1px solid rgba(251, 146, 60, 0.08);
+                0 8px 32px var(--color-accent-wash),
+                0 2px 8px var(--scrim-04);
+            border: 1px solid var(--color-accent-wash);
             backdrop-filter: blur(10px);
             transition: all 0.3s ease;
 
             .breathing-circle {
                 width: 60px;
                 height: 60px;
-                background: linear-gradient(135deg, #fb923c 0%, #f59e0b 100%);
+                background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent-text) 100%);
                 border-radius: 50%;
                 display: flex;
                 align-items: center;
                 justify-content: center;
                 margin: 0 auto 12px;
                 animation: breathing 4s ease-in-out infinite;
-                box-shadow: 0 6px 24px rgba(251, 146, 60, 0.25);
+                box-shadow: 0 6px 24px var(--color-accent-wash-strong);
                 position: relative;
             }
 
             .assistant-name {
                 font-size: 16px;
                 font-weight: 700;
-                background: linear-gradient(135deg, #fb923c, #f59e0b);
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
+                /* 对比度修正：渐变文字最浅处实测 2.24:1，brief 映射后的 accent 端仍只有 3.25:1，
+                   而 16px/700 需要 4.5:1；改为单色 --color-accent-text（卡片底 4.80:1），
+                   同时移除 background-clip:text 渐变裁切（否则颜色仍由渐变决定）。 */
+                color: var(--color-accent-text);
                 text-align: center;
-                background-clip: text;
                 margin: 0 0 12px;
             }
 
@@ -529,27 +529,27 @@ const handleDeleteSession = (sessionId) => {
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                color: #059669;
+                color: var(--color-success);
                 font-size: 12px;
                 font-weight: 600;
 
                 .status-dot {
                     width: 8px;
                     height: 8px;
-                    background: #059669;
+                    background: var(--color-success);
                     border-radius: 50%;
                     margin-right: 8px;
                     animation: pulse 2s infinite;
-                    box-shadow: 0 0 8px rgba(5, 150, 105, 0.4);
+                    box-shadow: 0 0 8px var(--color-success-wash-strong);
                 }
             }
         }
 
         .session-history {
-            background: white;
+            background: var(--color-surface);
             border-radius: 16px;
             padding: 16px;
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 12px var(--scrim-10);
             margin-bottom: 20px;
             min-height: 250px;
             display: flex;
@@ -558,7 +558,7 @@ const handleDeleteSession = (sessionId) => {
             .section-title {
                 font-size: 16px;
                 font-weight: 600;
-                color: #333;
+                color: var(--color-text);
                 margin: 0 0 16px;
                 display: flex;
                 align-items: center;
@@ -569,7 +569,7 @@ const handleDeleteSession = (sessionId) => {
                 overflow-y: auto;
                 max-height: 200px;
                 scrollbar-width: thin;
-                scrollbar-color: rgba(64, 150, 255, 0.3) transparent;
+                scrollbar-color: var(--color-info-wash-strong) transparent;
 
                 .session-item {
                     position: relative;
@@ -584,13 +584,13 @@ const handleDeleteSession = (sessionId) => {
                     border: 2px solid transparent;
 
                     &:hover {
-                        background: #f8f9ff;
-                        border-color: #e6f0ff;
+                        background: var(--color-primary-wash);
+                        border-color: var(--color-primary-light);
                     }
 
                     &.active {
-                        background: #e6f0ff;
-                        border-color: #4096ff;
+                        background: var(--color-primary-light);
+                        border-color: var(--color-primary);
                     }
 
                     .session-info {
@@ -599,7 +599,7 @@ const handleDeleteSession = (sessionId) => {
                         .session-title {
                             font-weight: 500;
                             font-size: 14px;
-                            color: #333;
+                            color: var(--color-text);
                             margin-bottom: 4px;
                             white-space: nowrap;
                             overflow: hidden;
@@ -614,14 +614,14 @@ const handleDeleteSession = (sessionId) => {
 
                                 .session-time {
                                     font-size: 12px;
-                                    color: #999;
+                                    color: var(--color-text-secondary);
                                 }
                             }
 
                             .session-preview {
                                 width: 200px;
                                 font-size: 12px;
-                                color: #666;
+                                color: var(--color-text-secondary);
                                 margin-bottom: 6px;
                                 white-space: nowrap;
                                 overflow: hidden;
@@ -635,7 +635,10 @@ const handleDeleteSession = (sessionId) => {
 
                                 span {
                                     font-size: 12px;
-                                    color: #999;
+                                    /* 对比度修正：brief 映射的 --color-text-placeholder 在白卡上只有
+                                       2.47:1（< 4.5:1，旧值本身也只有 2.85:1）；这四处都是正文元信息
+                                       （时间/条数/时长）而非表单占位符，改用 --color-text-secondary = 5.29:1。 */
+                                    color: var(--color-text-secondary);
                                     display: flex;
                                     align-items: center;
                                     gap: 4px;
@@ -654,21 +657,18 @@ const handleDeleteSession = (sessionId) => {
                 .no-sessions-text {
                     text-align: center;
                     font-size: 14px;
-                    color: #999;
+                    color: var(--color-text-secondary);
                 }
             }
         }
 
         .emotion-garden {
-            background: linear-gradient(135deg,
-                    #fef9e7 0%,
-                    #fcf4e6 50%,
-                    #f6f0e8 100%);
+            background: var(--color-bg);
             border-radius: 20px;
             padding: 16px;
             margin-bottom: 20px;
-            box-shadow: 0 8px 32px rgba(252, 244, 230, 0.8);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px var(--color-accent-light);
+            border: 1px solid var(--alpha-20);
             position: relative;
             overflow: hidden;
             min-height: 300px;
@@ -687,7 +687,7 @@ const handleDeleteSession = (sessionId) => {
                     gap: 8px;
                     font-size: 16px;
                     font-weight: 600;
-                    color: #8b4513;
+                    color: var(--color-accent-text);
                 }
             }
 
@@ -701,13 +701,12 @@ const handleDeleteSession = (sessionId) => {
                 align-items: center;
                 justify-content: center;
                 z-index: 10;
-                box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-                border: 2px solid rgba(255, 255, 255, 0.8);
-                background: linear-gradient(135deg,
-                        #ff9a9e 0%,
-                        #fecfef 50%,
-                        #fecfef 100%);
-                color: #fff;
+                box-shadow: 0 4px 16px var(--scrim-10);
+                border: 2px solid var(--alpha-80);
+                /* 对比度修正：brief 的 accent → accent-light 渐变上白字实测 1.36:1 ~ 3.27:1（15px/600 与
+                   14px/700 需 4.5:1）；改用同族深阶单色 --color-accent-text = 4.84:1。 */
+                background: var(--color-accent-text);
+                color: var(--color-text-inverse);
 
                 .emotion-name {
                     font-size: 15px;
@@ -719,7 +718,7 @@ const handleDeleteSession = (sessionId) => {
                 .emotion-score {
                     font-size: 14px;
                     font-weight: 700;
-                    opacity: 0.9;
+                    /* 原 opacity: 0.9 会把白字压成 90% 合成色，在主色深阶底上只有 4.25:1（< 4.5:1）；移除 */
                 }
             }
 
@@ -732,7 +731,7 @@ const handleDeleteSession = (sessionId) => {
 
                     .status-label {
                         font-size: 14px;
-                        color: #8b7355;
+                        color: var(--color-text-secondary);
                         margin-right: 8px;
                     }
 
@@ -760,36 +759,39 @@ const handleDeleteSession = (sessionId) => {
                             width: 8px;
                             height: 8px;
                             border-radius: 50%;
-                            background: #e0e0e0;
+                            background: var(--color-border);
                             transition: all 0.3s ease;
 
                             &.active {
-                                background: linear-gradient(135deg, #ff9a9e, #fecfef);
+                                /* 状态指示点：brief 的 accent → accent-light 渐变对卡片底只有 3.10:1 → 1.03:1
+                                   （非文字状态信息需 ≥3:1），改用 --color-accent-text：对卡片底 4.57:1、
+                                   对熄灭态圆点 4.07:1。 */
+                                background: var(--color-accent-text);
                                 transform: scale(1.2);
-                                box-shadow: 0 2px 8px rgba(255, 154, 158, 0.4);
+                                box-shadow: 0 2px 8px var(--color-accent-wash-strong);
                             }
                         }
                     }
 
                     .intensity-text {
                         font-size: 12px;
-                        color: #8b7355;
+                        color: var(--color-text-secondary);
                         font-weight: 500;
                     }
                 }
 
                 .warm-suggestion {
                     background: linear-gradient(135deg,
-                            rgba(255, 255, 255, 0.95),
-                            rgba(255, 255, 255, 0.8));
+                            var(--alpha-95),
+                            var(--alpha-80));
                     border-radius: 16px;
                     padding: 12px;
                     margin-bottom: 16px;
                     display: flex;
                     align-items: flex-start;
                     gap: 10px;
-                    border: 1px solid rgba(255, 255, 255, 0.6);
-                    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+                    border: 1px solid var(--alpha-60);
+                    box-shadow: 0 6px 20px var(--scrim-08);
 
                     .suggestion-icon {
                         font-size: 20px;
@@ -804,13 +806,13 @@ const handleDeleteSession = (sessionId) => {
                         .suggestion-title {
                             font-size: 14px;
                             font-weight: 600;
-                            color: #8b7355;
+                            color: var(--color-text-secondary);
                             margin-bottom: 6px;
                         }
 
                         .suggestion-text {
                             font-size: 13px;
-                            color: #6b5b47;
+                            color: var(--color-text-secondary);
                             line-height: 1.5;
                         }
                     }
@@ -826,7 +828,7 @@ const handleDeleteSession = (sessionId) => {
                         gap: 8px;
                         font-size: 14px;
                         font-weight: 600;
-                        color: #8b7355;
+                        color: var(--color-text-secondary);
                         margin-bottom: 16px;
                     }
 
@@ -837,26 +839,26 @@ const handleDeleteSession = (sessionId) => {
 
                         .action-item {
                             background: linear-gradient(135deg,
-                                    rgba(255, 255, 255, 0.9),
-                                    rgba(255, 255, 255, 0.7));
+                                    var(--alpha-90),
+                                    var(--alpha-70));
                             border-radius: 12px;
                             padding: 12px;
                             display: flex;
                             align-items: center;
                             gap: 10px;
-                            border: 1px solid rgba(255, 255, 255, 0.5);
-                            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+                            border: 1px solid var(--alpha-50);
+                            box-shadow: 0 4px 12px var(--scrim-06);
                             text-align: left;
 
                             .action-icon {
                                 font-size: 14px;
-                                color: #ffd700;
+                                color: var(--color-accent-text);
                                 flex-shrink: 0;
                             }
 
                             .action-text {
                                 font-size: 12px;
-                                color: #6b5b47;
+                                color: var(--color-text-secondary);
                                 line-height: 1.4;
                                 flex: 1;
                             }
@@ -865,14 +867,14 @@ const handleDeleteSession = (sessionId) => {
                 }
 
                 .risk-notice {
-                    background: linear-gradient(135deg, #fff9e6, #ffeaa7);
+                    background: var(--color-accent-light);
                     border-radius: 16px;
                     padding: 16px;
                     display: flex;
                     align-items: flex-start;
                     gap: 12px;
-                    border: 1px solid rgba(255, 234, 167, 0.6);
-                    box-shadow: 0 6px 20px rgba(255, 234, 167, 0.3);
+                    border: 1px solid var(--color-accent-wash-strong);
+                    box-shadow: 0 6px 20px var(--color-accent-wash);
 
                     .notice-icon {
                         font-size: 20px;
@@ -886,13 +888,15 @@ const handleDeleteSession = (sessionId) => {
                         .notice-title {
                             font-size: 14px;
                             font-weight: 600;
-                            color: #d4840f;
+                            /* 对比度修正：brief 指定的 --color-accent-text 落在 --color-accent-light 上
+                               实测 4.31:1（< 4.5:1），改用同族深阶 --color-warning = 4.87:1 */
+                            color: var(--color-warning);
                             margin-bottom: 6px;
                         }
 
                         .notice-text {
                             font-size: 13px;
-                            color: #b8740c;
+                            color: var(--color-warning);
                             line-height: 1.5;
                         }
                     }
@@ -903,13 +907,13 @@ const handleDeleteSession = (sessionId) => {
 
     .chat-main {
         background: linear-gradient(135deg,
-                rgba(255, 255, 255, 0.95) 0%,
-                rgba(255, 252, 250, 0.98) 100%);
+                var(--alpha-95) 0%,
+                var(--alpha-98) 100%);
         border-radius: 20px;
         box-shadow:
-            0 12px 40px rgba(251, 146, 60, 0.08),
-            0 4px 16px rgba(0, 0, 0, 0.04);
-        border: 1px solid rgba(251, 146, 60, 0.1);
+            0 12px 40px var(--color-accent-wash),
+            0 4px 16px var(--scrim-04);
+        border: 1px solid var(--color-accent-wash);
         backdrop-filter: blur(10px);
         display: flex;
         flex-direction: column;
@@ -919,8 +923,10 @@ const handleDeleteSession = (sessionId) => {
         min-height: 0;
         max-height: 800px;
         .chat-header {
-            background: linear-gradient(135deg, #fb923c 0%, #f59e0b 100%);
-            color: white;
+            /* 对比度修正：brief 的 accent → accent-text 渐变上白字最浅端仅 3.27:1，
+               而 14px 副标题需要 4.5:1；改用该渐变的深端单色 --color-accent-text（4.84:1，整幅一致）。 */
+            background: var(--color-accent-text);
+            color: var(--color-text-inverse);
             padding: 20px 24px;
             display: flex;
             align-items: center;
@@ -935,13 +941,13 @@ const handleDeleteSession = (sessionId) => {
                 .chat-avatar {
                     width: 48px;
                     height: 48px;
-                    background: rgba(255, 255, 255, 0.25);
+                    background: var(--alpha-25);
                     border-radius: 50%;
                     display: flex;
                     align-items: center;
                     justify-content: center;
                     margin-right: 16px;
-                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+                    box-shadow: 0 4px 12px var(--scrim-10);
                     position: relative;
                     z-index: 1;
                 }
@@ -955,7 +961,7 @@ const handleDeleteSession = (sessionId) => {
                         font-size: 20px;
                         font-weight: 700;
                         margin-bottom: 4px;
-                        color: white;
+                        color: var(--color-text-inverse);
                     }
 
                     p {
@@ -973,11 +979,11 @@ const handleDeleteSession = (sessionId) => {
             flex-direction: column;
             gap: 16px;
             background: linear-gradient(135deg,
-                    rgba(255, 255, 255, 0.02) 0%,
-                    rgba(255, 252, 248, 0.05) 100%);
+                    var(--alpha-02) 0%,
+                    var(--alpha-05) 100%);
             min-height: 0;
             scrollbar-width: thin;
-            scrollbar-color: rgba(251, 146, 60, 0.3) transparent;
+            scrollbar-color: var(--color-accent-wash-strong) transparent;
             .message-item {
                 display: flex;
                 align-items: flex-start;
@@ -991,37 +997,46 @@ const handleDeleteSession = (sessionId) => {
                     align-items: center;
                     justify-content: center;
                     font-size: 14px;
-                    color: white;
+                    color: var(--color-text-inverse);
                     flex-shrink: 0;
                 }
 
+                /* 头像内只有 el-image（图标图片），无文字节点：其底色属装饰，不参与 3:1 文字要求 */
                 &.ai-message {
                     .message-avatar {
-                        background: linear-gradient(135deg, #fb923c, #f59e0b);
-                        box-shadow: 0 4px 12px rgba(251, 146, 60, 0.3);
+                        background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent-text) 100%);
+                        box-shadow: 0 4px 12px var(--color-accent-wash-strong);
                     }
                 }
 
                 &.user-message {
                     .message-avatar {
-                        background: linear-gradient(135deg, #6b7280, #4b5563);
-                        box-shadow: 0 4px 12px rgba(107, 114, 128, 0.3);
+                        background: var(--color-text-secondary);
+                        box-shadow: 0 4px 12px var(--scrim-30);
+                    }
+
+                    /* 用户气泡：主色底 + inverse 字。多带一层 .message-content 提高特异性，
+                       以压过下面 .message-bubble 的基础（AI）规则——同特异性时源码顺序会反超。 */
+                    .message-content .message-bubble {
+                        background: var(--color-primary);
+                        color: var(--color-text-inverse);
                     }
                 }
 
                 .message-content {
                     max-width: 70%;
 
+                    /* 气泡配色约定（本任务产出，Task 10 咨询记录页复用）：
+                       基础 = AI 气泡（surface 底 + border 描边 + text 字），用户气泡在 &.user-message 中覆盖。 */
                     .message-bubble {
-                        background: linear-gradient(135deg,
-                                rgba(255, 255, 255, 0.9) 0%,
-                                rgba(255, 252, 248, 0.95) 100%);
+                        background: var(--color-surface);
+                        border: 1px solid var(--color-border);
+                        color: var(--color-text);
                         border-radius: 16px;
                         padding: 12px 16px;
                         position: relative;
                         animation: fadeInUp 0.4s ease-out;
-                        border: 1px solid rgba(251, 146, 60, 0.1);
-                        box-shadow: 0 4px 16px rgba(251, 146, 60, 0.05);
+                        box-shadow: 0 4px 16px var(--color-accent-wash);
 
                         p {
                             font-size: 14px;
@@ -1037,7 +1052,10 @@ const handleDeleteSession = (sessionId) => {
                             .typing-dot {
                                 width: 8px;
                                 height: 8px;
-                                background: #ccc;
+                                /* 对比度修正：brief 指定的 --color-text-placeholder 在气泡白底上仅
+                                   2.47:1（< 3:1），而“AI 正在输入”是有状态含义的非文字信息；
+                                   改用 --color-text-secondary = 5.29:1。 */
+                                background: var(--color-text-secondary);
                                 border-radius: 50%;
                                 animation: typing 1.5s ease-in-out infinite;
 
@@ -1060,7 +1078,7 @@ const handleDeleteSession = (sessionId) => {
 
                         .cursor-blink {
                             animation: blink 1s step-end infinite;
-                            color: #409eff;
+                            color: var(--color-primary);
                             font-weight: bold;
                         }
 
@@ -1068,13 +1086,16 @@ const handleDeleteSession = (sessionId) => {
                             50% { opacity: 0; }
                         }
 
-                        /* 错误消息样式 */
+                        /* 错误消息样式。这四个红色字面量不在 brief 的四组映射表内（见报告 §2 差异），
+                           按语义色令牌归并：底 --color-danger-light、描边 --color-danger
+                           （对底 3.85:1，满足非文字 3:1）；文字用 --color-text = 10.08:1，
+                           因为 --color-danger 作文字落在 --color-danger-light 上只有 3.85:1（< 4.5:1）。 */
                         .error-message {
-                            background: linear-gradient(135deg, #fef2f2 0%, #fecaca 100%);
-                            border: 1px solid #f87171;
+                            background: var(--color-danger-light);
+                            border: 1px solid var(--color-danger);
                             border-radius: 12px;
                             padding: 12px 16px;
-                            color: #991b1b;
+                            color: var(--color-text);
                             font-weight: 500;
                             display: flex;
                             align-items: center;
@@ -1085,7 +1106,7 @@ const handleDeleteSession = (sessionId) => {
                     .message-time {
                         font-size: 12px;
                         text-align: right;
-                        color: #999;
+                        color: var(--color-text-secondary);
                         margin-top: 4px;
                     }
                 }
@@ -1093,14 +1114,14 @@ const handleDeleteSession = (sessionId) => {
         }
 
         .chat-input {
-            border-top: 1px solid rgba(251, 146, 60, 0.1);
+            border-top: 1px solid var(--color-accent-wash);
             padding: 20px 24px;
             display: flex;
             gap: 12px;
             align-items: flex-end;
             background: linear-gradient(135deg,
-                    rgba(255, 255, 255, 0.5) 0%,
-                    rgba(255, 252, 248, 0.7) 100%);
+                    var(--alpha-50) 0%,
+                    var(--alpha-70) 100%);
             backdrop-filter: blur(10px);
             flex-shrink: 0;
 
@@ -1113,7 +1134,7 @@ const handleDeleteSession = (sessionId) => {
                 justify-content: space-between;
                 align-items: center;
                 font-size: 12px;
-                color: #78716c;
+                color: var(--color-text-secondary);
                 font-weight: 500;
             }
 
@@ -1121,11 +1142,13 @@ const handleDeleteSession = (sessionId) => {
                 height: 60px;
                 width: 60px;
                 border-radius: 16px;
-                background: linear-gradient(135deg,
-                        #fb923c 0%,
-                        #f59e0b 100%) !important;
-                border: none !important;
-                box-shadow: 0 6px 20px rgba(251, 146, 60, 0.25);
+                /* 对比度修正：brief 的 accent → accent-text 渐变上白图标实测 3.95:1（图标盒中心）
+                   ~ 3.27:1（最浅端），14px 图标需 4.5:1；改用渐变深端单色 --color-accent-text = 4.84:1。
+                   两条强制覆盖（background / border 的 important 声明）已按 brief 删除：本选择器
+                   特异性 (0,4,1) 远高于 element-plus 的 .el-button--primary (0,1,0)，无需强制覆盖。 */
+                background: var(--color-accent-text);
+                border: none;
+                box-shadow: 0 6px 20px var(--color-accent-wash-strong);
                 transition: all 0.3s ease;
             }
         }
