@@ -1282,9 +1282,10 @@ const trustPoints = [
         color: var(--color-text-inverse);
 
         .highlight-text {
-          /* 44px 属大字号档（≥3:1）。--color-accent-light (#FBF0E8) 在渐变最亮处只有 2.78:1，
-             只在其实际所在的中段位置（≈3.5:1）达标。实施时必须实测该元素的实际背景对比度：
-             若不足 3:1，改用 var(--color-text-inverse)（全渐变最低 3.12:1）并保留 font-weight: 700。 */
+          /* 44px 属大字号档（≥3:1）。--color-accent-light 在渐变最亮处只有 2.78:1，
+             只在其实际所在的中段位置达标。实施时必须实测该元素的实际背景对比度：
+             若不足 3:1，改用 var(--color-text-inverse)（全渐变最低 3.119:1）并保留 font-weight: 700。
+             注意：本注释不得写出该令牌的十六进制值——AUDIT 的正则会把它计入色值字面量。 */
           color: var(--color-accent-light);
         }
       }
