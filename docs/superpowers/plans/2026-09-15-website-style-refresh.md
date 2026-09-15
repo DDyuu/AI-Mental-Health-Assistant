@@ -782,7 +782,7 @@ Expected: `components\FrontendLayout.vue` = 7，`components\AuthLayout.vue` = 11
       width: 70%;
       height: 70%;
       border-radius: var(--radius-pill);
-      background: radial-gradient(circle, var(--alpha-15) 0%, transparent 70%);
+      background: radial-gradient(circle, var(--alpha-05) 0%, transparent 70%);
       pointer-events: none;
     }
 
@@ -806,8 +806,10 @@ Expected: `components\FrontendLayout.vue` = 7，`components\AuthLayout.vue` = 11
     .text {
       max-width: 460px;
       margin-bottom: var(--space-6);
-      font-size: var(--font-lg);
-      color: var(--alpha-90);
+      /* 24px 纯白：进入大字号档（门槛 3:1），因为 --alpha-90 白字在柔和渐变上仅 3.58:1，不满足正文的 4.5:1。
+         实测：纯白在整条渐变上最低 3.119:1，文字框内最低 3.399:1（Task 2 复审复算）。 */
+      font-size: var(--font-xl);
+      color: var(--color-text-inverse);
     }
 
     .robot {
@@ -1258,14 +1260,19 @@ const trustPoints = [
         color: var(--color-text-inverse);
 
         .highlight-text {
+          /* 44px 属大字号档（≥3:1）。--color-accent-light (#FBF0E8) 在渐变最亮处只有 2.78:1，
+             只在其实际所在的中段位置（≈3.5:1）达标。实施时必须实测该元素的实际背景对比度：
+             若不足 3:1，改用 var(--color-text-inverse)（全渐变最低 3.12:1）并保留 font-weight: 700。 */
           color: var(--color-accent-light);
         }
       }
 
       .description {
-        font-size: var(--font-lg);
+        /* 24px 纯白：进入大字号档（门槛 3:1）。18px + --alpha-90 在柔和渐变上仅 3.58:1，不满足正文的 4.5:1。
+           纯白在整条渐变上最低 3.119:1（Task 2 复审实测），故 24px 档安全。 */
+        font-size: var(--font-xl);
         line-height: 1.7;
-        color: var(--alpha-90);
+        color: var(--color-text-inverse);
       }
 
       .hero-actions {
@@ -1320,10 +1327,11 @@ const trustPoints = [
       flex: 1 1 220px;
       max-width: 320px;
       padding: var(--space-5);
-      border: 1px solid var(--alpha-20);
+      /* 95% 白卡而非 10% 白玻璃：玻璃底上的浅色文字无法达到 4.5:1（14px 正文）。
+         近白卡底让深色文字拿到 ≈11:1，且视觉上仍是"浮在渐变上的玻璃卡"。 */
+      border: 1px solid var(--color-border);
       border-radius: var(--radius-lg);
-      background: var(--alpha-10);
-      backdrop-filter: blur(8px);
+      background: var(--alpha-95);
 
       .trust-icon {
         display: flex;
@@ -1333,22 +1341,22 @@ const trustPoints = [
         height: 40px;
         margin-bottom: var(--space-3);
         border-radius: var(--radius-md);
-        background: var(--alpha-20);
+        background: var(--color-primary-light);
         font-size: var(--font-lg);
-        color: var(--color-text-inverse);
+        color: var(--color-primary);
       }
 
       .trust-title {
         margin-bottom: var(--space-2);
         font-size: var(--font-md);
         font-weight: 600;
-        color: var(--color-text-inverse);
+        color: var(--color-text);
       }
 
       .trust-desc {
         font-size: var(--font-sm);
         line-height: 1.7;
-        color: var(--alpha-80);
+        color: var(--color-text-secondary);
       }
     }
   }
