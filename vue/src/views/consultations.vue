@@ -129,12 +129,12 @@ onMounted(() => {
 <style lang="scss" scoped>
 .session-title {
     font-weight: 500;
-    color: #333;
+    color: var(--color-text);
     margin-bottom: 4px;
   }
   .session-preview {
     font-size: 13px;
-    color: #666;
+    color: var(--color-text-secondary);
     margin-bottom: 4px;
     display: -webkit-box;
     -webkit-line-clamp: 2;
@@ -148,9 +148,9 @@ onMounted(() => {
     .detail-header {
       margin-bottom: 20px;
       padding: 16px;
-      background: #f8f9fa;
+      background: var(--color-border-light);
       border-radius: 8px;
-      border: 1px solid #e9ecef;
+      border: 1px solid var(--color-border);
     }
 
     .detail-row {
@@ -162,13 +162,13 @@ onMounted(() => {
       }
       .detail-label {
         font-weight: 500;
-        color: #495057;
+        color: var(--color-text-secondary);
         min-width: 80px;
         margin-right: 8px;
       }
 
       .detail-value {
-        color: #333;
+        color: var(--color-text);
       }
     }
 
@@ -178,7 +178,7 @@ onMounted(() => {
         margin-bottom: 16px;
         h4 {
           margin: 0;
-          color: #333;
+          color: var(--color-text);
           font-size: 16px;
           font-weight: 500;
         }
@@ -186,24 +186,46 @@ onMounted(() => {
       .messages-list {
         max-height: 400px;
         overflow-y: auto;
-        border: 1px solid #e9ecef;
+        border: 1px solid var(--color-border);
         border-radius: 8px;
         padding: 16px;
-        background: #fff;
+        background: var(--color-surface);
         .message-item {
           margin-bottom: 12px;
           padding: 12px;
           border-radius: 8px;
-          background: #f8f9fa;
-          border: 1px solid #e9ecef;
+          background: var(--color-border-light);
+          border: 1px solid var(--color-border);
           &:last-child {
             margin-bottom: 0;
           }
+          /* 气泡配色与 /consultation 实时对话页（Task 7 接口）保持一致：
+             另一侧 = surface 底 + 中性描边 + 主文字，用户侧 = 主色底 + inverse 字。 */
           &.user-message {
-            background: #e8f4fd;
+            background: var(--color-primary);
+            color: var(--color-text-inverse);
+            /* 显式重置描边与阴影：基础 .message-item 带中性描边，
+               不清掉用户气泡就会带上“另一侧”白底描边的观感。 */
+            border: none;
+            box-shadow: none;
+
+            /* 下方 .sender/.time/.message-content 各自声明了深色，特异性更低但需在此一并覆盖，
+               否则用户气泡内的文字仍是深色，落在主色底上不可读。 */
+            .message-header {
+              .sender,
+              .time {
+                color: var(--color-text-inverse);
+              }
+            }
+
+            .message-content {
+              color: var(--color-text-inverse);
+            }
           }
           &.ai-message {
-            background: #f0f9f0;
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            color: var(--color-text);
           }
           .message-header {
             display: flex;
@@ -212,18 +234,18 @@ onMounted(() => {
             margin-bottom: 8px;
             .sender {
               font-weight: 500;
-              color: #333;
+              color: var(--color-text);
               display: flex;
               align-items: center;
               gap: 4px;
             }
             .time {
               font-size: 12px;
-              color: #999;
+              color: var(--color-text-secondary);
             }
           }
           .message-content {
-            color: #333;
+            color: var(--color-text);
             line-height: 1.6;
             white-space: pre-wrap;
             margin-top: 8px;
