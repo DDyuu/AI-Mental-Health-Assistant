@@ -78,6 +78,12 @@
   --el-border-color-light: #{t.$c-border};
   --el-border-color-lighter: #{t.$c-border-light};
   --el-border-color-extra-light: #{t.$c-border-light};
+  /* 悬停态的控件边界也是"功能性/状态性信息"（spec §3.5），不能沿用占位符文字的例外。
+     Element 把 --el-border-color-hover 定义为 --el-text-color-disabled，即占位符色（2.47:1）。
+     这里可以安全地写在 :root：实测 Element 的 dist CSS 全库只声明一次该变量且就在 :root
+     （--el-select 等只是声明自己的 --el-select-border-color-hover 去引用它），故不存在遮蔽，
+     与 --el-input-border-color 的情况不同。 */
+  --el-border-color-hover: var(--color-border-strong);
   /* 表单控件的可识别边界（≥3:1）不在这里，见文件末尾：Element 把它声明在组件上，
      写在 :root 会被遮蔽。装饰性边框继续用上面四个软令牌。 */
 
@@ -99,7 +105,10 @@
   --el-border-radius-round: 999px;
   --el-border-radius-circle: 100%;
 
-  /* 阴影：几何沿用 Element 默认，颜色取自 --scrim-* 令牌（本文件不得出现色值字面量） */
+  /* 阴影：几何为本设计自定的单层几何，**不是**沿用 Element 默认——Element 发布的
+     --el-box-shadow 是多层（带 4px 扩散的一层 + 无扩散的一层），--el-box-shadow-light/lighter
+     亦各为单层无扩散，与本文件的单层几何都不同；此处刻意统一为单层位移阴影。
+     颜色取自 --scrim-* 令牌（本文件不得出现色值字面量）。 */
   --el-box-shadow: 0 8px 24px var(--scrim-08);
   --el-box-shadow-light: 0 2px 8px var(--scrim-06);
   --el-box-shadow-lighter: 0 2px 8px var(--scrim-04);

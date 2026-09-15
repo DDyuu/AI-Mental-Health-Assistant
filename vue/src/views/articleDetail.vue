@@ -131,7 +131,7 @@ onMounted(() => {
     .diary-card {
       margin-bottom: 20px;
       background: var(--color-surface);
-      border-radius: 10px;
+      border-radius: var(--radius-lg);
       padding: 20px;
       box-shadow: 0 4px 6px var(--scrim-04);
       .title {

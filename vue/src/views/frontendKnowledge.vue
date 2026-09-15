@@ -184,7 +184,6 @@ onMounted(() => {
       box-shadow: 0 2px 10px var(--scrim-08);
       padding: 15px;
       .section-title {
-        font-size: 12;
         font-weight: 600;
         color: var(--color-text);
         margin-bottom: 10px;

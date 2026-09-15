@@ -18,6 +18,15 @@ const collect = (text) => {
 const tokens = collect(readFileSync(tokensPath, 'utf8'))
 const palette = collect(readFileSync(palettePath, 'utf8'))
 
+/* 空色板守卫：色板若解析出 0 个色值（例如 chartColors 被改成 {}），
+   missing 恒为空数组，脚本会打印"0 个色值全部来自 tokens.scss"并退出 0——
+   这是本校验唯一构造得出的假绿路径。宁可失败，不可假绿。 */
+if (palette.size === 0) {
+  console.error('x chart-palette.js 未解析出任何色值，校验无从进行（色板为空或写法不可识别）。')
+  console.error('修复：确认该文件仍导出含 #hex / rgb() / rgba() 色值的 chartColors 与 chartSeries。')
+  process.exit(1)
+}
+
 const missing = [...palette].filter((c) => !tokens.has(c))
 
 if (missing.length > 0) {

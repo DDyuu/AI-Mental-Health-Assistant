@@ -44,6 +44,22 @@ a {
   }
 }
 
+/* 正文内链接必须保留下划线：全局 a 重置去掉了浏览器默认下划线，而链接色与正文色
+   实测仅 2.30:1（悬停 1.53:1），不满足 WCAG 1.4.1 的"颜色不得是唯一线索"。
+   导航与按钮类链接不受影响——它们有底色/边框作为线索。
+
+   与评审清单的实测差异：清单写的 `p a, li a, .footer a` 只命中 login.vue:35 与
+   register.vue:75；login.vue:9 的"返回首页"位于 `.backHome`（div 包 el-icon + router-link，
+   既不在 p 也不在 li，也不在 .footer 内），按清单原文它拿不到下划线。它同样没有任何
+   底色/边框线索，且改动前本就有浏览器默认下划线，故补上第四个选择器。 */
+p a,
+li a,
+.footer a,
+.backHome a {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
 /* ---------- 4 个通用类 ---------- */
 
 .page-container {

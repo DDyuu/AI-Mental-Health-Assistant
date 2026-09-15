@@ -667,7 +667,13 @@ const handleDeleteSession = (sessionId) => {
             border-radius: 20px;
             padding: 16px;
             margin-bottom: 20px;
-            box-shadow: 0 8px 32px var(--color-accent-light);
+            /* 原为 0 8px 32px var(--color-accent-light)：不透明的浅橙阴影叠在 --color-bg 上
+               只能把底色微微提亮（本波用同底色探针面板实测：最深边缘像素对底色仅 1.0408:1），
+               与同样为 --color-bg 的面板底色合起来让整块面板"消失"。
+               改用 --shadow-sm（深绿调 scrim，与全站 .app-card 同一令牌）：
+               探针实测最深边缘像素 1.0634:1，且与站点其余卡片语言一致。
+               底色与边框是计划指定的，保持不动。 */
+            box-shadow: var(--shadow-sm);
             border: 1px solid var(--alpha-20);
             position: relative;
             overflow: hidden;
@@ -1020,6 +1026,12 @@ const handleDeleteSession = (sessionId) => {
                     .message-content .message-bubble {
                         background: var(--color-primary);
                         color: var(--color-text-inverse);
+                        /* 显式重置描边与阴影（跨任务待办，本波执行）：基础（AI）气泡带
+                           1px --color-border 描边与暖橙 box-shadow，用户气泡只覆盖了两个属性
+                           就会继承这两条，绿色气泡配暖橙光；consultations.vue 的同一会话
+                           已重置，两页渲染必须一致。 */
+                        border: none;
+                        box-shadow: none;
                     }
                 }
 
@@ -1145,7 +1157,7 @@ const handleDeleteSession = (sessionId) => {
                 /* 按钮内只有图标、没有文字，属非文字的功能性元素 → 门槛 3:1。
                    本渐变的浅端 --color-accent 为 3.2733:1、中点 3.9692:1、深端 4.8373:1，全段达标。
                    注意：只有"控件内含小于 24px 的文字且文字为浅色"时才适用 4.5:1。
-                   两条强制覆盖（background / border 的 important 声明）已按 brief 删除：本选择器
+                   background / border 上原有的最高优先级强制覆盖已按 brief 删除：本选择器
                    特异性 (0,4,1) 远高于 element-plus 的 .el-button--primary (0,1,0)，无需强制覆盖。 */
                 background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent-text) 100%);
                 border: none;

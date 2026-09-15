@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "prebuild": "npm run check:tokens",
     "build": "vite build",
     "preview": "vite preview",
     "check:tokens": "node scripts/check-token-parity.mjs"
@@ -24,6 +25,7 @@
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^6.0.6",
+    "sass": "^1.97.2",
     "vite": "^8.0.12"
   }
 }
