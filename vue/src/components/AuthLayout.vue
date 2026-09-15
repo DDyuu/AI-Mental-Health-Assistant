@@ -21,53 +21,88 @@ import iconUrl from '@/assets/images/robot.svg'
 </script>
 
 <style lang="scss" scoped>
+@use '../styles/mixins' as m;
+
 .auth-layout {
+  display: flex;
+  min-height: 100vh;
+
+  .left-section {
+    position: relative;
     display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background: linear-gradient(135deg, var(--color-primary-soft) 0%, var(--color-primary-dark) 100%);
+
+    /* 一层极淡径向光斑，营造"安静"的质感 */
+    &::before {
+      content: '';
+      position: absolute;
+      top: -20%;
+      left: -10%;
+      width: 70%;
+      height: 70%;
+      border-radius: var(--radius-pill);
+      background: radial-gradient(circle, var(--alpha-15) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .content {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: var(--space-6);
+      text-align: center;
+    }
+
+    .title {
+      margin-bottom: var(--space-5);
+      font-size: var(--font-2xl);
+      font-weight: 700;
+      color: var(--color-text-inverse);
+    }
+
+    .text {
+      max-width: 460px;
+      margin-bottom: var(--space-6);
+      font-size: var(--font-lg);
+      color: var(--alpha-90);
+    }
+
+    .robot {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 160px;
+      height: 160px;
+      border: 1px solid var(--alpha-20);
+      border-radius: var(--radius-pill);
+      background: linear-gradient(135deg, var(--alpha-15) 0%, var(--alpha-05) 100%);
+      box-shadow: var(--shadow-lg), inset 0 1px 0 var(--alpha-30);
+    }
+  }
+
+  .right-section {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background-color: var(--color-surface);
+  }
+
+  @include m.below-md {
     .left-section {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex: 1;
-        background: linear-gradient(90deg, rgb(74, 156, 140) 0%, rgb(61, 138, 122) 100%) rgba(74, 156, 140, 0.95);
-        height: 100vh;
-        .content {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            .title {
-                margin-bottom: 20px;
-                font-size: 40px;
-                font-weight: bold;
-                color: #fff;
-            }
-            .text {
-                margin-bottom: 20px;
-                width: 460px;
-                font-size: 20px;
-                color: #fff;
-                text-align: center;
-            }
-            .robot {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                width: 160px;
-                height: 160px;
-                border-radius: 50%;
-                border: 2px solid rgba(255, 255, 255, 0.2);
-                background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.05) 100%);
-                box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1),inset 0 1px 0 rgba(255, 255, 255, 0.3);
-            }
-        }
+      display: none; /* 窄屏只保留表单，避免表单被挤去 */
     }
+
     .right-section {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex: 1;
-        height: 100vh;
-        background-color: #fff;
+      padding: var(--space-5);
     }
+  }
 }
 </style>

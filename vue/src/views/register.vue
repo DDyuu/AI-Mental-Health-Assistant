@@ -143,23 +143,23 @@ const submitForm = async (formEl) => {
     .title-text {
       text-align: center;
       h2 {
-        font-size: 36px;
+        font-size: var(--font-3xl);
         margin-bottom: 10px;
       }
       p {
-        font-size: 18px;
-        color: #6b7280;
+        font-size: var(--font-lg);
+        color: var(--color-text-secondary);
       }
     }
   }
   .form-container {
-    margin-top: 30px;
+    margin-top: var(--space-6);
     .btn {
-      margin-top: 40px;
+      margin-top: var(--space-6);
       width: 100%;
     }
     .footer {
-      padding: 30px;
+      padding: var(--space-6);
       text-align: end;
     }
   }
