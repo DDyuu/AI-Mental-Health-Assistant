@@ -699,14 +699,21 @@ onMounted(() => {
       }
     }
 
-    /* 数字取对应卡片的语义深阶色；accent 与 success 两阶落在各自的浅底上
-       只有 4.31:1 / 4.41:1（< 4.5:1），故这两张卡的数字改用 --color-text
-       （10.61:1 / 10.37:1）。语义与浅底仍由卡面底色与深阶图标块承载。 */
+    /* 四张卡的数字都取各自的语义深阶色。上面的 .number 是 24px / 700，
+       按 spec §3.5 属**大字号档**，门槛 3:1（不是正文的 4.5:1）。
+       四对数字对各自卡面浅底的实算：primary 4.56:1、accent-text 4.31:1、
+       info 4.65:1、success 4.41:1 —— 四者全部 ≥3:1，故无需换成中性文字色。 */
     .avatar.users ~ .info .number {
       color: var(--color-primary);
     }
+    .avatar.like ~ .info .number {
+      color: var(--color-accent-text);
+    }
     .avatar.comments ~ .info .number {
       color: var(--color-info);
+    }
+    .avatar.smile ~ .info .number {
+      color: var(--color-success);
     }
   }
 
