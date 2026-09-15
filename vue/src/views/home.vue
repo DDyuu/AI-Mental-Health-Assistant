@@ -10,7 +10,11 @@
           每个深夜，每个焦虑的时刻，我们都在这里，不必独自承受，让心与心的连接温暖您的每一天
         </p>
         <div class="hero-actions">
-          <el-button type="primary" size="large" @click="$router.push('/consultation')"
+          <el-button
+            class="continue-btn"
+            type="primary"
+            size="large"
+            @click="$router.push('/consultation')"
             >开始倾诉，获得陪伴</el-button
           >
           <el-button
@@ -130,6 +134,15 @@ const trustPoints = [
           color: var(--color-text-inverse);
         }
 
+        &:focus-visible {
+          outline-color: var(--color-text-inverse);
+        }
+      }
+
+      /* 主按钮的填充就是 --color-primary，而聚焦环全局也是 --color-primary，
+         于是"环对按钮"= 1.000:1，键盘聚焦时环消失（实测）。彩色底上的按钮必须把环改成纯白：
+         对主色填充 5.16:1、对青绿渐变约 5:1。 */
+      .continue-btn {
         &:focus-visible {
           outline-color: var(--color-text-inverse);
         }
