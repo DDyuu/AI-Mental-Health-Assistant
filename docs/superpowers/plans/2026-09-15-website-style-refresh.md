@@ -176,6 +176,9 @@ $c-info-light: #E9F0F6;
   /* 边框 */
   --color-border: #{$c-border};
   --color-border-light: #{$c-border-light};
+  /* 功能性边框：仅用于表单控件的可识别边界（对白 3.28:1、对 --color-bg 3.11:1）。
+     装饰性分隔线、卡片描边、表格行线仍用上面两个软令牌，见 spec §3.5 例外二。 */
+  --color-border-strong: #83918C;
 
   /* 文字 */
   --color-text: #{$c-text};
@@ -375,6 +378,9 @@ $bp-md: 1024px;
   --el-border-color-lighter: #{t.$c-border-light};
   --el-border-color-extra-light: #{t.$c-border-light};
 
+  /* 表单控件的可识别边界（≥3:1）不在这里，见文件末尾：Element 把它声明在组件上，
+     写在 :root 会被遮蔽。装饰性边框继续用上面四个软令牌。 */
+
   /* 填充 */
   --el-fill-color: #{t.$c-border-light};
   --el-fill-color-light: #{t.$c-border-light};
@@ -405,6 +411,26 @@ $bp-md: 1024px;
   --el-font-size-extra-small: 12px;
   --el-font-size-medium: 16px;
   --el-font-size-large: 18px;
+}
+
+/* ---------------------------------------------------------------------------
+   表单控件的可识别边界提到 ≥3:1（WCAG 1.4.11）。装饰性边框仍走软令牌。
+   焦点态本就是 --el-color-primary，无需覆盖。
+
+   **为什么这段不在上面的 :root 里**（实测结论，勿改回去）：
+   Element Plus 把 --el-input-border-color / --el-input-hover-border-color 声明在
+   **组件选择器**上，而不是 :root。自定义属性遵循普通继承与层叠规则——元素自身的
+   声明会**遮蔽**从 :root 继承来的值，与优先级和加载顺序无关。所以写在 :root 的
+   覆盖是死代码（headless 浏览器实测：.el-input__wrapper 的边框仍解析为软灰值）。
+   覆盖必须落在同一批组件选择器上；本文件在 element-plus/dist/index.css 之后加载，
+   同优先级下后者胜出，故此处生效。
+   --------------------------------------------------------------------------- */
+.el-input,
+.el-textarea,
+.el-date-editor,
+.el-autocomplete {
+  --el-input-border-color: var(--color-border-strong);
+  --el-input-hover-border-color: var(--color-primary);
 }
 ```
 
@@ -1011,10 +1037,6 @@ template 中把 `style="margin-right: 50px;"` 这个硬编码移除，改为 cla
 
   @include m.above-md {
     width: 220px;
-  }
-
-  @media (min-width: 1920px) {
-    width: 240px;
   }
 
   &.collapsed {
