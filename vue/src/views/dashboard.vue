@@ -137,6 +137,7 @@
 import { ref, onMounted } from "vue";
 import { getAnalyticsOverview } from "@/api/admin";
 import * as echarts from "echarts";
+import { chartColors } from "@/styles/chart-palette";
 //统计图片引入
 const iconUrli = new URL("@/assets/images/users.png", import.meta.url).href;
 const iconLike = new URL("@/assets/images/like.png", import.meta.url).href;
@@ -185,7 +186,7 @@ const initEmotionChart = () => {
       textStyle: {
         fontSize: 16,
         fontWeight: 600,
-        color: "#2d3436",
+        color: chartColors.text,
       },
       left: "center",
       top: 10,
@@ -193,10 +194,10 @@ const initEmotionChart = () => {
     tooltip: {
       // 提示框
       trigger: "axis", // 触发类型：坐标轴触发
-      borderColor: "#fab1a0",
+      borderColor: chartColors.accent,
       borderWidth: 1,
       textStyle: {
-        color: "#2d3436",
+        color: chartColors.text,
       },
     },
     legend: {
@@ -216,7 +217,7 @@ const initEmotionChart = () => {
       data: TrendData.map((item) => item.date),
       axisLine: {
         lineStyle: {
-          color: "rgba(244, 162, 97, 0.3)",
+          color: chartColors.accent,
         },
       },
     },
@@ -226,16 +227,16 @@ const initEmotionChart = () => {
         name: "情绪评分",
         position: "left",
         axisLabel: {
-          color: "#636e72",
+          color: chartColors.textSecondary,
         },
         axisLine: {
           lineStyle: {
-            color: "rgba(244, 162, 97, 0.3)",
+            color: chartColors.accent,
           },
         },
         splitLine: {
           lineStyle: {
-            color: "rgba(244, 162, 97, 0.1)",
+            color: chartColors.accentLight,
           },
         },
       },
@@ -244,11 +245,11 @@ const initEmotionChart = () => {
         name: "记录数量",
         position: "right",
         axisLabel: {
-          color: "#636e72",
+          color: chartColors.textSecondary,
         },
         axisLine: {
           lineStyle: {
-            color: "rgba(244, 162, 97, 0.3)",
+            color: chartColors.accent,
           },
         },
         splitLine: {
@@ -264,10 +265,10 @@ const initEmotionChart = () => {
         smooth: true, // 平滑曲线
         lineStyle: {
           width: 3,
-          color: "#ffeaa7",
+          color: chartColors.warning,
         },
         itemStyle: {
-          color: "#ffeaa7",
+          color: chartColors.warning,
         },
       },
       {
@@ -277,10 +278,10 @@ const initEmotionChart = () => {
         smooth: true,
         lineStyle: {
           width: 3,
-          color: "#fab1a0",
+          color: chartColors.accent,
         },
         itemStyle: {
-          color: "#fab1a0",
+          color: chartColors.accent,
         },
       },
     ],
@@ -326,25 +327,25 @@ const initConsultationChart = () => {
       textStyle: {
         fontSize: 16,
         fontWeight: 600,
-        color: "#2d3436",
+        color: chartColors.text,
       },
       left: "center",
       top: 10,
     },
     tooltip: {
       trigger: "axis",
-      backgroundColor: "rgba(255, 255, 255, 0.95)",
-      borderColor: "#fab1a0",
+      backgroundColor: chartColors.surface,
+      borderColor: chartColors.accent,
       borderWidth: 1,
       textStyle: {
-        color: "#2d3436",
+        color: chartColors.text,
       },
     },
     legend: {
       data: ["会话数量", "参与用户数"],
       top: 40,
       textStyle: {
-        color: "#636e72",
+        color: chartColors.textSecondary,
       },
     },
     grid: {
@@ -359,26 +360,26 @@ const initConsultationChart = () => {
       data: dailyTrend.map((item) => item.date),
       axisLine: {
         lineStyle: {
-          color: "rgba(244, 162, 97, 0.3)",
+          color: chartColors.accent,
         },
       },
       axisLabel: {
-        color: "#636e72",
+        color: chartColors.textSecondary,
       },
     },
     yAxis: {
       type: "value",
       axisLabel: {
-        color: "#636e72",
+        color: chartColors.textSecondary,
       },
       axisLine: {
         lineStyle: {
-          color: "rgba(244, 162, 97, 0.3)",
+          color: chartColors.accent,
         },
       },
       splitLine: {
         lineStyle: {
-          color: "rgba(244, 162, 97, 0.1)",
+          color: chartColors.accentLight,
         },
       },
     },
@@ -395,8 +396,8 @@ const initConsultationChart = () => {
             x2: 0,
             y2: 1,
             colorStops: [
-              { offset: 0, color: "#74b9ff" },
-              { offset: 1, color: "#0984e3" },
+              { offset: 0, color: chartColors.info },
+              { offset: 1, color: chartColors.primary },
             ],
           },
         },
@@ -414,8 +415,8 @@ const initConsultationChart = () => {
             x2: 0,
             y2: 1,
             colorStops: [
-              { offset: 0, color: "#fdcb6e" },
-              { offset: 1, color: "#f39c12" },
+              { offset: 0, color: chartColors.warning },
+              { offset: 1, color: chartColors.warning },
             ],
           },
         },
@@ -468,25 +469,25 @@ const initUserActivityChart = () => {
       textStyle: {
         fontSize: 16,
         fontWeight: 600,
-        color: "#2d3436",
+        color: chartColors.text,
       },
       left: "center",
       top: 10,
     },
     tooltip: {
       trigger: "axis",
-      backgroundColor: "rgba(255, 255, 255, 0.95)",
-      borderColor: "#fab1a0",
+      backgroundColor: chartColors.surface,
+      borderColor: chartColors.accent,
       borderWidth: 1,
       textStyle: {
-        color: "#2d3436",
+        color: chartColors.text,
       },
     },
     legend: {
       data: ["活跃用户", "新增用户", "日记用户", "咨询用户"],
       top: 40,
       textStyle: {
-        color: "#636e72",
+        color: chartColors.textSecondary,
       },
     },
     grid: {
@@ -501,26 +502,26 @@ const initUserActivityChart = () => {
       data: activityData.map((item) => item.date),
       axisLine: {
         lineStyle: {
-          color: "rgba(244, 162, 97, 0.3)",
+          color: chartColors.accent,
         },
       },
       axisLabel: {
-        color: "#636e72",
+        color: chartColors.textSecondary,
       },
     },
     yAxis: {
       type: "value",
       axisLabel: {
-        color: "#636e72",
+        color: chartColors.textSecondary,
       },
       axisLine: {
         lineStyle: {
-          color: "rgba(244, 162, 97, 0.3)",
+          color: chartColors.accent,
         },
       },
       splitLine: {
         lineStyle: {
-          color: "rgba(244, 162, 97, 0.1)",
+          color: chartColors.accentLight,
         },
       },
     },
@@ -532,10 +533,10 @@ const initUserActivityChart = () => {
         smooth: true,
         lineStyle: {
           width: 3,
-          color: "#a29bfe",
+          color: chartColors.info,
         },
         itemStyle: {
-          color: "#a29bfe",
+          color: chartColors.info,
         },
         areaStyle: {
           color: {
@@ -545,8 +546,8 @@ const initUserActivityChart = () => {
             x2: 0,
             y2: 1,
             colorStops: [
-              { offset: 0, color: "rgba(162, 155, 254, 0.4)" },
-              { offset: 1, color: "rgba(162, 155, 254, 0.1)" },
+              { offset: 0, color: chartColors.infoWashStrong },
+              { offset: 1, color: chartColors.infoLight },
             ],
           },
         },
@@ -558,10 +559,10 @@ const initUserActivityChart = () => {
         smooth: true,
         lineStyle: {
           width: 3,
-          color: "#fdcb6e",
+          color: chartColors.warning,
         },
         itemStyle: {
-          color: "#fdcb6e",
+          color: chartColors.warning,
         },
       },
       {
@@ -571,10 +572,10 @@ const initUserActivityChart = () => {
         smooth: true,
         lineStyle: {
           width: 3,
-          color: "#00b894",
+          color: chartColors.success,
         },
         itemStyle: {
-          color: "#00b894",
+          color: chartColors.success,
         },
       },
       {
@@ -584,10 +585,10 @@ const initUserActivityChart = () => {
         smooth: true,
         lineStyle: {
           width: 3,
-          color: "#fab1a0",
+          color: chartColors.accent,
         },
         itemStyle: {
-          color: "#fab1a0",
+          color: chartColors.accent,
         },
       },
     ],
@@ -598,14 +599,10 @@ const initUserActivityChart = () => {
 onMounted(() => {
   getAnalyticsOverview()
     .then((res) => {
-      console.log("API Response:", res);
       aiData.value = res;
-      console.log("Data loaded:", aiData.value);
-      // 延迟执行图表初始化，确保数据已完全设置
+      // 延迟执行图表初始化，确保DOM已完全设置
       setTimeout(() => {
-        console.log("Initializing charts...");
         initCharts();
-        console.log("Charts initialized");
       }, 100);
     })
     .catch((error) => {
@@ -619,6 +616,23 @@ onMounted(() => {
 
   @media (max-width: 768px) {
     padding: 10px;
+  }
+
+  /* 指标卡：原 4 个高饱和渐变卡 → 浅底卡片。
+     卡面（el-card 表面）取语义浅阶，用 :has() 按图标块的类名逐卡着色，
+     使数字与副标题都落在该浅阶底色上（而不是白卡上）。
+     :has() 不可用的环境退化为白卡 + 深阶图标块，两种情形对比度都已实算。 */
+  .el-card:has(.avatar.users) {
+    background-color: var(--color-primary-light);
+  }
+  .el-card:has(.avatar.like) {
+    background-color: var(--color-accent-light);
+  }
+  .el-card:has(.avatar.comments) {
+    background-color: var(--color-info-light);
+  }
+  .el-card:has(.avatar.smile) {
+    background-color: var(--color-success-light);
   }
 
   .card-content {
@@ -639,7 +653,8 @@ onMounted(() => {
       margin-right: 12px;
       width: 60px;
       height: 60px;
-      border-radius: 12px;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -649,36 +664,49 @@ onMounted(() => {
         height: 50px;
       }
 
+      /* 图标块：4 个图标是纯白 PNG（透明底，实读像素 R=G=B=255），
+         原来的高饱和渐变换成语义深阶色，白色图标才有对比度。
+         深阶作底、白图标压在其上，是这套令牌本来的用法。 */
       &.users {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: var(--color-primary);
       }
       &.like {
-        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        background: var(--color-accent-text);
       }
       &.comments {
-        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        background: var(--color-info);
       }
       &.smile {
-        background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        background: var(--color-success);
       }
     }
 
     .info {
       .title {
         font-size: 14px;
-        color: #7f8c8d;
+        color: var(--color-text-secondary);
         margin-bottom: 4px;
       }
       .number {
         font-size: 24px;
         font-weight: 700;
-        color: #2c3e50;
+        color: var(--color-text);
         margin-bottom: 4px;
       }
       .subtitle-title {
         font-size: 12px;
-        color: #95a5a6;
+        color: var(--color-text-secondary);
       }
+    }
+
+    /* 数字取对应卡片的语义深阶色；accent 与 success 两阶落在各自的浅底上
+       只有 4.31:1 / 4.41:1（< 4.5:1），故这两张卡的数字改用 --color-text
+       （10.61:1 / 10.37:1）。语义与浅底仍由卡面底色与深阶图标块承载。 */
+    .avatar.users ~ .info .number {
+      color: var(--color-primary);
+    }
+    .avatar.comments ~ .info .number {
+      color: var(--color-info);
     }
   }
 
@@ -696,11 +724,6 @@ onMounted(() => {
       height: 200px;
     }
 
-    canvas {
-      width: 100% !important;
-      height: 100% !important;
-    }
-
     .consultation-stats {
       display: flex;
       justify-content: space-around;
@@ -716,14 +739,14 @@ onMounted(() => {
 
         .stat-label {
           font-size: 12px;
-          color: #7f8c8d;
+          color: var(--color-text-secondary);
           margin-bottom: 4px;
         }
 
         .stat-value {
           font-size: 18px;
           font-weight: 600;
-          color: #2c3e50;
+          color: var(--color-text);
         }
       }
     }
@@ -732,7 +755,7 @@ onMounted(() => {
   .card-header {
     font-size: 16px;
     font-weight: 600;
-    color: #2c3e50;
+    color: var(--color-text);
   }
 }
 </style>
