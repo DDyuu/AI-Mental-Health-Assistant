@@ -115,6 +115,14 @@
 - **作为大字号文字**（≥24px 常规 或 ≥18.66px 加粗）→ **≥ 3:1**
 - **作为非文字元素**（图标、边框、图形、大面积色块）→ **≥ 3:1**
 
+**唯一的明文例外：`--color-text-placeholder`（占位符与禁用态文字）。** 它在白底上为 2.47:1，**不满足**上文的 4.5:1 文字标准。保留该值是有意的取舍，理由如下：
+
+1. 占位符是**非必要信息**——用户一旦输入即被真实内容替代，且所有输入框都配有 `el-form-item` 的 label，信息不依赖占位符传达。
+2. 要满足 4.5:1，可选色的范围会被压到与 `--color-text-secondary`（5.31:1）几乎无差别的区间，**占位符与已填内容将无法区分**——这是比对比度更严重的可用性缺陷。
+3. 该值与 Element Plus 自身的占位符默认色（约 2.5:1）一致，因此不构成回归。
+
+**严格按 WCAG 1.4.3 字面解释，占位符属于文字、应当达标。** 本设计明确选择不满足该项，这是一个已知并记录的偏差，而非疏漏。凡日后要做无障碍合规审计，此处需重新评估。
+
 **已核算通过的组合**（实施时直接可用）：
 
 | 前景 | 背景 | 对比度 |
@@ -188,7 +196,7 @@ import './styles/index.scss'   // 替换原来的 './style.css'
 
 覆盖 `--el-*` 变量而非逐组件写 `:deep()`：
 
-- `--el-color-primary` 及 `light-1` … `light-9`、`dark-2`：**不手写色值**，用 SCSS `color.mix()` 按 Element 官方配比从主色自动计算（`light-N = mix(#fff, primary, N*10%)`、`dark-2 = mix(#000, primary, 20%)`），未来换主色仅改一个变量。生成完整 1–9 阶而非仅 3/5/7/8/9，是因为 Element 内部部分组件会引用中间阶，缺阶会回退到默认色而造成偏色
+- `--el-color-primary` 及 `light-1` … `light-9`、`dark-2`：**不手写色值**，用 SCSS `color.mix()` 按 Element 官方配比从主色自动计算（`light-N = mix(#fff, primary, N*10%)`、`dark-2 = mix(#000, primary, 20%)`），未来换主色仅改一个变量。主色生成完整 1–9 阶（无害超集）；其余语义色族只生成 Element 实际发布的 `light-3/5/7/8/9` + `dark-2`——**实施中已核实 Element 的构建产物本身就不发布 `light-1/2/4/6`**，为其他色族凭空补齐中间阶没有依据，反而会掩盖"某组件引用了不存在的阶"这类问题
 - `--el-border-radius-base: 10px`（默认 4px，这是"圆润感"的关键改动点）
 - `--el-text-color-primary / regular / secondary / placeholder`
 - `--el-border-color / -light / -lighter`、`--el-fill-color / -light / -lighter / -blank`
