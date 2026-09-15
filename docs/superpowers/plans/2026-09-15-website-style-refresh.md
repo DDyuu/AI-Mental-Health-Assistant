@@ -432,6 +432,30 @@ $bp-md: 1024px;
   --el-input-border-color: var(--color-border-strong);
   --el-input-hover-border-color: var(--color-primary);
 }
+
+/* ---------------------------------------------------------------------------
+   按钮的悬停 / 按下 / 聚焦色。Element 默认让主按钮悬停变**浅**
+   （--el-button-hover-bg-color: --el-color-primary-light-3），对本设计的深主色
+   会算出一个浅青绿，白字只剩 2.88:1；聚焦环用 light-5，对白仅 2.04:1。
+   两项都是功能/状态性信息，必须达标，故改为：悬停/按下走向深阶（白字 7.2:1），
+   聚焦环用主色（对白 5.16:1）。
+
+   **同样必须先确认宿主选择器**：Element 把这些变量声明在 .el-button 系组件选择器上，
+   写在 :root 会被遮蔽（与上面 --el-input-* 同理）。
+   注意：本注释不得写出十六进制值——AUDIT 的正则会把它计入色值字面量。
+
+   **选择器必须分开写**：--el-button-hover-bg-color / --el-button-active-bg-color 只能作用于
+   .el-button--primary。若设在 .el-button 上，默认（白色）按钮的悬停底也会变成深青，
+   而它的悬停文字色是主色，结果是深底深字不可读。聚焦环则对全部按钮统一用主色。
+   --------------------------------------------------------------------------- */
+.el-button {
+  --el-button-outline-color: var(--color-primary);
+}
+
+.el-button--primary {
+  --el-button-hover-bg-color: var(--el-color-primary-dark-2);
+  --el-button-active-bg-color: var(--color-primary-dark);
+}
 ```
 
 - [ ] **Step 5: 创建 `vue/src/styles/base.scss`**
@@ -1184,7 +1208,11 @@ Expected: `views\home.vue` = 10
           每个深夜，每个焦虑的时刻，我们都在这里，不必独自承受，让心与心的连接温暖您的每一天
         </p>
         <div class="hero-actions">
-          <el-button type="primary" size="large" @click="$router.push('/consultation')"
+          <el-button
+            class="continue-btn"
+            type="primary"
+            size="large"
+            @click="$router.push('/consultation')"
             >开始倾诉，获得陪伴</el-button
           >
           <el-button
@@ -1305,16 +1333,31 @@ const trustPoints = [
         margin-top: var(--space-6);
       }
 
+      /* 白字 14px 需要 4.5:1：透明底上渐变最亮侧只有 4.43:1，故用深色 scrim 底把白字抬到 ≈5.6:1，
+         悬停再深一档。聚焦环在彩色渐变上不能用主色（与背景同色系不可辨），改用纯白。 */
       .ghost-btn {
-        background: transparent;
+        background: var(--scrim-30);
         border-color: var(--alpha-60);
         color: var(--color-text-inverse);
 
         &:hover,
         &:focus {
-          background: var(--alpha-10);
+          background: var(--scrim-40);
           border-color: var(--color-text-inverse);
           color: var(--color-text-inverse);
+        }
+
+        &:focus-visible {
+          outline-color: var(--color-text-inverse);
+        }
+      }
+
+      /* 主按钮的填充就是 --color-primary，而聚焦环全局也是 --color-primary，
+         于是"环对按钮"= 1.000:1，键盘聚焦时环消失（实测）。彩色底上的按钮必须把环改成纯白：
+         对主色填充 5.16:1、对青绿渐变约 5:1。 */
+      .continue-btn {
+        &:focus-visible {
+          outline-color: var(--color-text-inverse);
         }
       }
     }
@@ -1350,6 +1393,9 @@ const trustPoints = [
       flex: 1 1 220px;
       max-width: 320px;
       padding: var(--space-5);
+      /* 卡片是近白底，必须重置继承自 .home-container 的白色文字色，
+         否则日后往卡里加第四个文字节点会白底白字不可见。 */
+      color: var(--color-text);
       /* 95% 白卡而非 10% 白玻璃：玻璃底上的浅色文字无法达到 4.5:1（14px 正文）。
          近白卡底让深色文字拿到 ≈11:1，且视觉上仍是"浮在渐变上的玻璃卡"。 */
       border: 1px solid var(--color-border);
