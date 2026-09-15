@@ -1,0 +1,51 @@
+- Task 1: minor (deferred): element-theme.scss:100 注释不实（"几何沿用 Element 默认"——Element 实为多层阴影，本实现是有意替换为单层）
+- Task 1: minor (deferred): --el-box-shadow-light/dark 可改用 var(--shadow-sm/lg) 以消除重复的阴影几何（--el-box-shadow ≡ --shadow-md 已在值上等价）；--el-box-shadow-lighter(0.04) 无对应 shadow 令牌
+- Task 1: minor (deferred): 5 个语义色族重复 7 行相同模式，可折叠为 @each（评审建议不强制）
+- Task 1: minor (deferred): dev 模式下 sass 输出小数通道 rgb(83.1,132.6,121.8)；生产构建已正确取整为 hex（#53857a 等），仅 dev 可见
+- Task 1: minor (deferred): --el-color-primary-light-1/2/4/6 为计划要求的超集，Element 不发布这几阶（勿当死代码清理）
+- Task 2: minor (deferred): 依据简报原文，移动端 .main-content { padding: 10px } 未保留（实施者按简报精确执行）；需目视确认窄屏前台页面留白是否可接受
+- Task 2: minor (deferred): AuthLayout.vue "被挤去" → 应为"被挤压"（成因见上，控制器流程错误）
+- Task 2: minor (deferred): 移动端 .main-content { padding: 10px } 未保留，<768px 时内容贴边而页头页脚仍有边距。需目视确认
+- Task 2: minor (deferred): FrontendLayout.vue .nav-link--cta (0,1,0) 无法覆盖 .nav-link.router-link-active (0,2,0)；注册链接在 /auth/register 上确实拿到药丸底色，只因 padding:0 被主按钮盖住而不可见——是巧合不是正确性
+- Task 2: minor (deferred): AuthLayout.vue below-md 下 .right-section 的 min-height:100vh 叠加 padding，内容盒模型下恒有约 48px 滚动
+- Task 2: minor (deferred): .text 提到 24px 使左栏内容列增高约 58px，视图高度 <438px 且宽 >1024px 时 .robot 会被 overflow:hidden 裁切（仅退化视口）
+- Task 2: minor (deferred): .navbar-container 未 sticky/fixed，"玻璃条"效果视觉上不可观测（--alpha-90 白叠 --color-bg 仅约 3% 差异）
+- Task 3: minor (deferred): 表单控件的 hover 与 focus 现在同为 --color-primary，损失了悬停/聚焦的视觉区分（裁定所致）
+- Task 3: minor (deferred): .el-input-group__prepend/__append 的加段边线一并变为 3:1（仍属表单控件边界，在裁定意图内，但属未列出的视觉面）
+- Task 3: minor (deferred): 侧边栏 hover 底色对静止底仅 1.11:1（靠文字色变化传达状态，可感知但底色对比弱）
+- Task 3: minor (deferred): Sidebar transition: width 0.3s 为硬编码（--transition-base 是 0.2s），非约束违反但一致性欠佳
+- Task 3: residual（spec 已记录）: el-select / el-checkbox / el-table 的静止态边框仍走软令牌，低于 3:1，本次有意不覆盖，需在无障碍审计时重新评估
+- Task 4: minor (deferred): primary 悬停时边框仍为 Element 的 light-3（对新的深悬停底 2.503:1，但已较修复前 1.79:1 改善）
+- Task 4: minor (deferred): .el-button--primary.is-plain/.is-text/.is-link 自带 (0,2,0) 的 hover-bg 声明，我们的规则覆盖不到；当前代码库没有这类按钮（唯一 plain 是无 type 的幽灵按钮）
+- Task 4: minor (deferred): home.vue:144 注释"对青绿渐变约 5:1"不准确，实测相邻 4.099:1、全局最亮处 3.1193:1（建议改为"4.1:1（最亮处 3.12:1）"）
+- Task 4: minor (deferred): continue-btn 命名与语义（"品牌渐变上的主按钮"）无关联
+- Task 4: minor (deferred): home.vue:46 遗留未使用的 import { ref, onMounted }（既有问题，非本次引入）
+- Tasks 5/6/8: minor (deferred): articleDetail.vue:134 仍用 border-radius: 10px 而相邻知识库卡片已用 --radius-lg，同一卡片模式在两个相邻页面出现两种圆角
+- Tasks 5/6/8: minor (deferred): emotionDiary.vue:251 把 .emotion-card 由 15px 改为 --radius-lg(16px)，brief 未点名该目标
+- Tasks 5/6/8: minor (deferred): 三处文件重复了同一段 3–4 行对比度理由注释，需同步维护
+- Tasks 5/6/8: minor (deferred): 余量偏薄——--color-text-secondary 在 --color-border-light 上 4.7695:1、在 --color-primary-light 上 4.6726:1（余量 4–6%）；标题的 3:1 档依赖 --font-xl 恰为 ≥24px 边界，若日后响应式缩小到 24px 以下即失效
+- Tasks 5/6/8: minor (deferred): articleDetail.vue:159 的强调条在 --color-primary-wash 上仅 2.9521:1（判为例外二的装饰性结构，复审同意；若改判为功能性，in-token 方案是 --color-accent-text，白底 4.8373:1 / wash 上 4.3626:1）
+- Tasks 5/6/8: minor (deferred): frontendKnowledge.vue:188 font-size: 12（无单位/无效，既有问题）；articleDetail.vue:15 <el-tag color="category-tag"> 死属性（既有）
+- Task 7: minor (deferred): .send-btn 注释里的适用性表述偏松（4.5:1 适用于所有低于大字号界的文字，与前景深浅无关）
+- Task 7: minor (deferred): 发送按钮的 hover/active/disabled 反馈被 (0,5,0) 作用域规则冻结，禁用态与可用态视觉不可分辨（既有行为，非本次引入）
+- Task 7: minor (deferred): .emotion-garden 底色改为 --color-bg 后与页面底色 1.0000:1 完全融合，边框合成仅约 1.0087:1（plan-mandated，实施者已如实披露并给出未应用的一行补救）
+- Task 7: minor (deferred): 用户气泡继承了 AI 气泡的 --color-border 描边与暖色 box-shadow，绿色气泡带暖橙阴影（两半都是 brief 指定，Task 10 应决定是否在用户气泡规则里重置）
+- Task 7: minor (deferred): .emotion-garden 内 position:relative / overflow:hidden / z-index 为遗留死声明（既有）
+- Task 7: minor (deferred): 报告 §3.2 漏述 .assistant-name 的渐变也改为纯色（该改动本身是被对比度强制的）
+- Tasks 9/10: minor (deferred): 预览框圆角由 4px 变 --radius-md(10px)，无 4px 令牌可用（字面量被禁），--radius-sm(8px) 更接近原值
+- Tasks 9/10: minor (deferred): .editor-frame 的 overflow: hidden 是 brief 新增，可能裁掉 wangeditor 工具栏下拉面板；因无后端无法目视，属未验证而非已知问题
+- Tasks 9/10: minor (deferred): .editor-body 命名误导（该节点是阅读预览，不是编辑器正文）
+- Tasks 9/10: minor (deferred): consultations.vue:210 的 box-shadow: none 在本文件是惰性的（本文件只有这一处 box-shadow）
+- Tasks 9/10: minor (deferred): consultations.vue:152/190/196 仍有 8px 圆角字面量（非颜色，超出本任务范围）
+- Task 11: minor (deferred): 校验脚本无"色板为空"守卫——chartColors 改成 {} 会打印"0 个色值全部来自 tokens.scss"并退出 0（唯一构造出的假绿路径；计划原文即如此）
+- Task 11: minor (deferred): 源文件缺失时报 raw ENOENT 堆栈而非友好提示（退出码正确）
+- Task 11: minor (deferred): 比较是按值而非按键，故 primarySoft: '#40776B' 这种键值错配仍会绿灯（与"键名与 --color-<name> 一一对应"的文档约定不符）；且校验是单向的
+- Task 11: minor (deferred): 简写 #FFF 对 #FFFFFF 会报假阳性（安全方向）；非 #hex/rgb() 形式的颜色值（如 color(display-p3 …)）对脚本不可见
+- Task 11: minor (deferred): chartSeries 色序里 primarySoft(索引0) 与 success(索引4) 同为绿色系，6 系列图上可能难辨——留给 Task 13 的目视确认
+- Task 12: minor (deferred): 文件里有 8 个死选择器（.ai-analysis-*/.keyword-tag/.ai-keywords-section 等在模板中无对应元素），既有问题；这意味着两处记录过的偏差（#909399→textSecondary、.keyword-tag→--color-text）**实际无渲染效果**
+- Task 12: minor (deferred): ackground-color: var(--color-border-light) 用边框令牌当底色（brief 原文如此，--color-bg 语义更贴近原值 #f8f9fa），且该规则是死代码
+- Task 12: minor (deferred): emotions.vue:385 注释用 "important" 替写以避开审计 grep（可维护性小瑕疵，计数不受影响）
+- Task 13: minor (deferred): --color-accent-text 被用作图标壳**底色**，与 tokens.scss 注释"深阶作文字、浅阶作底色"的角色约定相反（数值上合理，但耦合了文字角色与表面角色）
+- Task 13: minor (deferred): "参与用户数"柱状渐变因 brief 把 #fdcb6e/#f39c12 映射到同一个 warning 键而变成纯色填充
+- Task 13: minor (deferred): 图标壳圆角由 12px 变 16px（--radius-lg 被落在壳上而非卡上，实施者已披露并说明理由）
+- Task 13: minor (deferred): dashboard.vue:667-669 注释里写了颜色值（"实读像素 R=G=B=255"），非 hex/rgba 故不触发审计，但属"注释里的颜色值"边缘情形
