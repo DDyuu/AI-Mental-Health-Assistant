@@ -68,6 +68,9 @@ $c-info-light: #E9F0F6;
   /* 边框 */
   --color-border: #{$c-border};
   --color-border-light: #{$c-border-light};
+  /* 功能性边框：仅用于表单控件的可识别边界（对白 ≥3:1）。
+     装饰性分隔线、卡片描边、表格行线仍用上面两个软令牌，见 spec §3.5 例外二。 */
+  --color-border-strong: #83918C;
 
   /* 文字 */
   --color-text: #{$c-text};

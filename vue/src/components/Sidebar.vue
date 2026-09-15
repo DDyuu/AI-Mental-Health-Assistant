@@ -45,10 +45,6 @@ const isCollapse = computed(() => adminStore.isCollapse)
     width: 220px;
   }
 
-  @media (min-width: 1920px) {
-    width: 240px;
-  }
-
   &.collapsed {
     width: 64px;
   }
