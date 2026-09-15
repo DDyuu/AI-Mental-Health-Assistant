@@ -169,7 +169,7 @@ const getAiEmotionTagType = (emotion) => {
 const getEmotionScoreColor = (score) => {
   if (score >= 80) return chartColors.danger
   if (score >= 60) return chartColors.warning
-  if (score >= 40) return chartColors.textPlaceholder
+  if (score >= 40) return chartColors.textSecondary
   return chartColors.success
 }
 
