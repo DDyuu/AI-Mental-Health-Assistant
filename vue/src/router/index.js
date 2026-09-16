@@ -64,8 +64,11 @@ router.beforeEach(async (to, from, next) => {
       }
     } else {
       // 普通用户只能访问前台路由
-      if (to.path.startsWith('/back') || to.path.startsWith('/auth')) {
+      if (to.path.startsWith('/back')) {
         next('/auth/login')
+      } else if (to.path.startsWith('/auth')) {
+        // 已登录用户访问登录/注册页 → 跳首页
+        next('/home')
       } else {
         next()
       }

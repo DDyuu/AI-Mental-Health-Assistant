@@ -55,7 +55,7 @@ file:
 deepseek:
   api-key: ${DEEPSEEK_API_KEY}
   api-url: https://api.deepseek.com/chat/completions
-  model: deepseek-chat
+  model: deepseek-flash
 
 mybatis-plus:
   configuration:
